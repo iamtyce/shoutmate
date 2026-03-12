@@ -11,6 +11,13 @@
   min-height: 100dvh;
 }
 
+#view-home:not([hidden]),
+#view-trip:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 // ---------------------------------------------------------------------------
 // Header — base + variants
 // ---------------------------------------------------------------------------
