@@ -35,14 +35,22 @@
 
   // ── Home variant ──
   &--home {
-    background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg) 100%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-surface) 30%, var(--color-bg) 70%) 0%,
+      var(--color-bg) 100%
+    );
     color: var(--color-text);
     padding: 0;
   }
 
   // ── Trip variant ──
   &--trip {
-    background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg) 100%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-surface) 30%, var(--color-bg) 70%) 0%,
+      var(--color-bg) 100%
+    );
     color: var(--color-text);
     padding: $space-4 $space-4 $space-5;
   }
@@ -336,14 +344,18 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    padding: $space-2 $space-4;
     gap: $space-2;
-    padding: $space-2 $space-5;
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     color: var(--color-text-muted);
     border-radius: $radius-full;
     white-space: nowrap;
     transition: background $transition-fast, color $transition-fast;
+
+    @media (min-width: 480px) {
+      padding: $space-2 $space-5;
+    }
 
     &:hover:not(&--active) {
       color: var(--color-text-secondary);

@@ -802,6 +802,38 @@ function renderSettle(): void {
 // Bootstrap
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Footer component
+// ---------------------------------------------------------------------------
+
+const CURRENCY_OPTIONS = `
+  <option value="AUD">🇦🇺 AUD</option>
+  <option value="USD">🇺🇸 USD</option>
+  <option value="EUR">🇪🇺 EUR</option>
+  <option value="GBP">🇬🇧 GBP</option>
+  <option value="NZD">🇳🇿 NZD</option>
+  <option value="CAD">🇨🇦 CAD</option>
+  <option value="JPY">🇯🇵 JPY</option>
+  <option value="SGD">🇸🇬 SGD</option>`;
+
+function buildFooter(currencySelectId: string, currencyAriaLabel: string): string {
+  return `
+    <footer class="trip-footer">
+      <div class="trip-footer__inner">
+        <p class="trip-footer__copy">${S.appTagline}</p>
+        <div class="trip-footer__right">
+          <div class="trip-footer__currency">
+            <label class="trip-footer__label" for="${currencySelectId}">${S.currencyLabel}</label>
+            <select class="trip-footer__select" id="${currencySelectId}" aria-label="${currencyAriaLabel}">
+              ${CURRENCY_OPTIONS}
+            </select>
+          </div>
+          <button class="theme-toggle" aria-label="${S.toggleDarkModeAriaLabel}">🌙</button>
+        </div>
+      </div>
+    </footer>`;
+}
+
 function initStaticStrings(): void {
   document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((node) => {
     const key = node.dataset.i18n as keyof typeof S;
@@ -821,6 +853,10 @@ function initStaticStrings(): void {
 }
 
 function init(): void {
+  // Inject footer components before any event wiring
+  el('#footer-mount-home').outerHTML = buildFooter('home-select-currency', S.defaultCurrencyAriaLabel);
+  el('#footer-mount-trip').outerHTML = buildFooter('select-currency', S.selectCurrencyAriaLabel);
+
   initStaticStrings();
   initTheme();
 
