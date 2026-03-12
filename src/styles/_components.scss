@@ -33,17 +33,17 @@
     margin: 0 auto;
   }
 
-  // ── Home variant: light sky gradient, dark text, hero height ──
+  // ── Home variant ──
   &--home {
-    background: linear-gradient(175deg, #b8dff5 0%, #ceeaf9 35%, #e4f4fc 70%, $color-bg 100%);
-    color: $color-text;
+    background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg) 100%);
+    color: var(--color-text);
     padding: 0;
   }
 
-  // ── Trip variant: light sky gradient, dark text (matches home aesthetic) ──
+  // ── Trip variant ──
   &--trip {
-    background: linear-gradient(175deg, #b8dff5 0%, #ceeaf9 35%, #e4f4fc 70%, $color-bg 100%);
-    color: $color-text;
+    background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-bg) 100%);
+    color: var(--color-text);
     padding: $space-4 $space-4 $space-5;
   }
 
@@ -55,7 +55,7 @@
     gap: $space-2;
     margin-bottom: $space-4;
     padding-bottom: $space-3;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid var(--color-border);
 
     .btn--share {
       margin-left: auto;
@@ -89,7 +89,7 @@
     }
 
     &:hover .header__brand-name {
-      border-bottom-color: $color-text;
+      border-bottom-color: var(--color-text);
     }
   }
 
@@ -123,13 +123,13 @@
     flex: 1;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
+      background: var(--color-border);
     }
 
     &--editing {
-      background: $color-surface;
-      border: 1.5px solid $color-border;
-      color: $color-text;
+      background: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      color: var(--color-text);
       font-family: $font-family;
       font-size: $font-size-lg;
       font-weight: $font-weight-bold;
@@ -140,7 +140,7 @@
       width: 200px;
 
       &:focus {
-        border-color: $color-primary;
+        border-color: var(--color-primary);
         box-shadow: $shadow-focus;
       }
     }
@@ -340,19 +340,19 @@
     padding: $space-2 $space-5;
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
     border-radius: $radius-full;
     white-space: nowrap;
     transition: background $transition-fast, color $transition-fast;
 
     &:hover:not(&--active) {
-      color: $color-text-secondary;
-      background: rgba(0, 0, 0, 0.04);
+      color: var(--color-text-secondary);
+      background: var(--color-border);
     }
 
     &--active {
-      background: $color-primary-xlight;
-      color: $color-primary;
+      background: var(--color-primary-xlight);
+      color: var(--color-primary);
       font-weight: $font-weight-semibold;
     }
   }
@@ -691,7 +691,7 @@
   flex-shrink: 0;
 
   &:hover {
-    color: $color-text;
+    color: var(--color-text);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -734,11 +734,11 @@
   gap: $space-3;
   padding: $space-3;
   border-radius: $radius-md;
-  background: $color-bg;
+  background: var(--color-neutral-bg);
   transition: background $transition-fast;
 
   &:hover {
-    background: color.adjust($color-bg, $lightness: -2%);
+    background: var(--color-border);
   }
 
   &__avatar {
@@ -825,11 +825,11 @@
   position: relative;
   padding: $space-3;
   border-radius: $radius-md;
-  background: $color-bg;
+  background: var(--color-neutral-bg);
   transition: background $transition-fast;
 
   &:hover {
-    background: color.adjust($color-bg, $lightness: -2%);
+    background: var(--color-border);
   }
 
   &__body {
@@ -837,7 +837,7 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: $space-2;
-    padding-right: $space-8;
+    padding-right: $space-12;
     margin-bottom: $space-1;
   }
 
@@ -849,7 +849,7 @@
   &__amount {
     font-weight: $font-weight-bold;
     font-size: $font-size-md;
-    color: $color-text;
+    color: var(--color-text);
     flex-shrink: 0;
   }
 
@@ -858,12 +858,12 @@
     flex-direction: column;
     gap: $space-1;
     font-size: $font-size-xs;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
   }
 
   &__split {
     font-size: $font-size-xs;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
   }
 
   &__remove {
@@ -901,7 +901,7 @@
   gap: $space-3;
   padding: $space-3;
   border-radius: $radius-md;
-  background: $color-bg;
+  background: var(--color-neutral-bg);
 
   &__name {
     flex: 1;
@@ -921,8 +921,8 @@
   gap: $space-4;
   padding: $space-4;
   border-radius: $radius-md;
-  background: $color-bg;
-  border-left: 3px solid $color-primary-light;
+  background: var(--color-neutral-bg);
+  border-left: 3px solid var(--color-primary-light);
 
   &__avatars {
     display: flex;
@@ -933,7 +933,7 @@
 
   &__arrow {
     font-size: $font-size-md;
-    color: $color-primary;
+    color: var(--color-primary);
     font-weight: $font-weight-bold;
   }
 
@@ -948,7 +948,7 @@
   &__amount {
     font-size: $font-size-md;
     font-weight: $font-weight-bold;
-    color: $color-negative;
+    color: var(--color-negative);
   }
 }
 
@@ -994,12 +994,12 @@
   gap: $space-3;
   padding: $space-4;
   border-radius: $radius-md;
-  background: $color-bg;
+  background: var(--color-neutral-bg);
   cursor: pointer;
   transition: background $transition-fast, box-shadow $transition-fast;
 
   &:hover {
-    background: color.adjust($color-bg, $lightness: -2%);
+    background: var(--color-border);
     box-shadow: $shadow-sm;
   }
 
@@ -1021,7 +1021,7 @@
 
   &__meta {
     font-size: $font-size-xs;
-    color: $color-text-muted;
+    color: var(--color-text-muted);
   }
 
   &__actions {
@@ -1148,16 +1148,6 @@
 // ---------------------------------------------------------------------------
 
 [data-theme="dark"] {
-  // Header gradients
-  .header--home {
-    background: linear-gradient(175deg, #091422 0%, #0d1b2e 40%, #0f2035 70%, var(--color-bg) 100%);
-  }
-
-  .header--trip {
-    background: #0d1b2e;
-    border-bottom: 1px solid var(--color-border);
-  }
-
   .header__brand-name,
   .header__trip-name,
   .card__title,
@@ -1223,28 +1213,19 @@
 
   .checkbox-label {
     color: var(--color-text-secondary);
-  }
+    border-color: var(--color-border);
 
-  // Person items
-  .person-item {
-    background: var(--color-neutral-bg);
-
-    &__name {
-      color: var(--color-text);
+    &:has(input:checked) {
+      background: var(--color-primary-xlight);
+      border-color: var(--color-primary);
+      color: var(--color-primary-light);
     }
   }
 
   // Expense items
   .expense-item {
-    border-bottom-color: var(--color-border);
-
     &__desc {
       color: var(--color-text);
-    }
-
-    &__meta,
-    &__split {
-      color: var(--color-text-muted);
     }
   }
 
@@ -1263,26 +1244,10 @@
     color: var(--color-text-muted);
   }
 
-  // Balance/settlement items
-  .balance-item__name,
-  .settlement-item__detail {
-    color: var(--color-text);
-  }
-
   // Trip cards (home list)
   .trip-card {
-    border-bottom-color: var(--color-border);
-
     &__name {
       color: var(--color-text);
-    }
-
-    &__meta {
-      color: var(--color-text-muted);
-    }
-
-    &:hover {
-      background: var(--color-neutral-bg);
     }
   }
 

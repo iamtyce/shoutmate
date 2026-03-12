@@ -25,7 +25,7 @@
           <div class="panel panel--active">
             <div class="panel__content">
               <div class="card">
-                <h2 class="card__title">New trip</h2>
+                <h2 class="card__title" data-i18n="newTrip">New trip</h2>
                 <form id="form-create-trip" class="form" novalidate>
                   <div class="form__row">
                     <div class="form__field">
@@ -35,12 +35,13 @@
                         id="input-trip-name"
                         name="tripName"
                         placeholder="e.g. Ski Weekend, Lake House..."
+                        data-i18n-placeholder="tripNamePlaceholder"
                         autocomplete="off"
                         maxlength="60"
                         required
                       />
                     </div>
-                    <button class="btn btn--primary" type="submit">Create</button>
+                    <button class="btn btn--primary" type="submit" data-i18n="createBtn">Create</button>
                   </div>
                   <p class="form__error" id="error-trip-name" role="alert" aria-live="polite"></p>
                 </form>
@@ -51,11 +52,11 @@
         </main>
         <footer class="trip-footer">
           <div class="trip-footer__inner">
-            <p class="trip-footer__copy">ShoutMate · Split costs, not friendships.</p>
+            <p class="trip-footer__copy" data-i18n="appTagline">ShoutMate · Split costs, not friendships.</p>
             <div class="trip-footer__right">
               <div class="trip-footer__currency">
-                <label class="trip-footer__label" for="home-select-currency">Currency</label>
-                <select class="trip-footer__select" id="home-select-currency" aria-label="Default currency">
+                <label class="trip-footer__label" for="home-select-currency" data-i18n="currencyLabel">Currency</label>
+                <select class="trip-footer__select" id="home-select-currency" aria-label="Default currency" data-i18n-aria="defaultCurrencyAriaLabel">
                   <option value="AUD">🇦🇺 AUD</option>
                   <option value="USD">🇺🇸 USD</option>
                   <option value="EUR">🇪🇺 EUR</option>
@@ -66,7 +67,7 @@
                   <option value="SGD">🇸🇬 SGD</option>
                 </select>
               </div>
-              <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+              <button class="theme-toggle" aria-label="Toggle dark mode" data-i18n-aria="toggleDarkModeAriaLabel">🌙</button>
             </div>
           </div>
         </footer>
@@ -78,15 +79,15 @@
           <div class="tabs__inner">
             <button class="tabs__btn tabs__btn--active" data-tab="people" role="tab" aria-selected="true" aria-controls="panel-people">
               <span class="tabs__icon">👥</span>
-              <span>People</span>
+              <span data-i18n="tabPeople">People</span>
             </button>
             <button class="tabs__btn" data-tab="expenses" role="tab" aria-selected="false" aria-controls="panel-expenses">
               <span class="tabs__icon">💸</span>
-              <span>Expenses</span>
+              <span data-i18n="tabExpenses">Expenses</span>
             </button>
             <button class="tabs__btn" data-tab="settle" role="tab" aria-selected="false" aria-controls="panel-settle">
               <span class="tabs__icon">🤝</span>
-              <span>Settle Up</span>
+              <span data-i18n="tabSettleUp">Settle Up</span>
             </button>
           </div>
         </nav>
@@ -96,24 +97,25 @@
           <section id="panel-people" class="panel panel--active" role="tabpanel">
             <div class="panel__content">
               <div class="card">
-                <h2 class="card__title">Who's coming?</h2>
+                <h2 class="card__title" data-i18n="whoComing">Who's coming?</h2>
                 <form id="form-add-person" class="form" novalidate>
                   <div class="form__row">
                     <div class="form__field">
-                      <label class="form__label" for="input-person-name">Name</label>
+                      <label class="form__label" for="input-person-name" data-i18n="nameLabel">Name</label>
                       <input
                         class="form__input"
                         type="text"
                         id="input-person-name"
                         name="name"
                         placeholder="e.g. Alex"
+                        data-i18n-placeholder="personNamePlaceholder"
                         autocomplete="off"
                         maxlength="40"
                         required
                       />
                     </div>
-                    <button class="btn btn--primary btn--icon" type="submit" aria-label="Add person">
-                      <span>Add</span>
+                    <button class="btn btn--primary btn--icon" type="submit" aria-label="Add person" data-i18n-aria="addPersonAriaLabel">
+                      <span data-i18n="addPersonBtn">Add</span>
                     </button>
                   </div>
                   <p class="form__error" id="error-person-name" role="alert" aria-live="polite"></p>
@@ -127,19 +129,20 @@
           <section id="panel-expenses" class="panel" role="tabpanel" hidden>
             <div class="panel__content">
               <div class="card" id="expense-form-card">
-                <h2 class="card__title">Add an expense</h2>
+                <h2 class="card__title" data-i18n="addExpenseTitle">Add an expense</h2>
                 <div id="expenses-no-people" class="empty-state" hidden>
-                  <p>Add some people first before logging expenses.</p>
+                  <p data-i18n="noPeopleForExpenses">Add some people first before logging expenses.</p>
                 </div>
                 <form id="form-add-expense" class="form" novalidate>
                   <div class="form__field">
-                    <label class="form__label" for="input-expense-desc">Description</label>
+                    <label class="form__label" for="input-expense-desc" data-i18n="descriptionLabel">Description</label>
                     <input
                       class="form__input"
                       type="text"
                       id="input-expense-desc"
                       name="description"
                       placeholder="e.g. Groceries, Airbnb, Petrol..."
+                      data-i18n-placeholder="expenseDescPlaceholder"
                       autocomplete="off"
                       maxlength="80"
                       required
@@ -147,7 +150,7 @@
                   </div>
                   <div class="form__row">
                     <div class="form__field">
-                      <label class="form__label" for="input-expense-amount">Amount</label>
+                      <label class="form__label" for="input-expense-amount" data-i18n="amountLabel">Amount</label>
                       <input
                         class="form__input"
                         type="number"
@@ -160,18 +163,18 @@
                       />
                     </div>
                     <div class="form__field">
-                      <label class="form__label" for="input-expense-paid-by">Paid by</label>
+                      <label class="form__label" for="input-expense-paid-by" data-i18n="paidByLabel">Paid by</label>
                       <select class="form__select" id="input-expense-paid-by" name="paidById" required>
                         <option value="">Select person</option>
                       </select>
                     </div>
                   </div>
                   <div class="form__field">
-                    <label class="form__label">Split among</label>
+                    <label class="form__label" data-i18n="splitAmongLabel">Split among</label>
                     <div id="split-among-checkboxes" class="checkboxes"></div>
                   </div>
                   <p class="form__error" id="error-expense" role="alert" aria-live="polite"></p>
-                  <button class="btn btn--primary btn--full" type="submit">Add Expense</button>
+                  <button class="btn btn--primary btn--full" type="submit" data-i18n="addExpenseBtn">Add Expense</button>
                 </form>
               </div>
               <div id="expenses-list" class="expenses-list"></div>
@@ -188,11 +191,11 @@
 
         <footer class="trip-footer">
           <div class="trip-footer__inner">
-            <p class="trip-footer__copy">ShoutMate · Split costs, not friendships.</p>
+            <p class="trip-footer__copy" data-i18n="appTagline">ShoutMate · Split costs, not friendships.</p>
             <div class="trip-footer__right">
               <div class="trip-footer__currency">
-                <label class="trip-footer__label" for="select-currency">Currency</label>
-                <select class="trip-footer__select" id="select-currency" aria-label="Select currency">
+                <label class="trip-footer__label" for="select-currency" data-i18n="currencyLabel">Currency</label>
+                <select class="trip-footer__select" id="select-currency" aria-label="Select currency" data-i18n-aria="selectCurrencyAriaLabel">
                   <option value="AUD">🇦🇺 AUD</option>
                   <option value="USD">🇺🇸 USD</option>
                   <option value="EUR">🇪🇺 EUR</option>
@@ -203,7 +206,7 @@
                   <option value="SGD">🇸🇬 SGD</option>
                 </select>
               </div>
-              <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+              <button class="theme-toggle" aria-label="Toggle dark mode" data-i18n-aria="toggleDarkModeAriaLabel">🌙</button>
             </div>
           </div>
         </footer>

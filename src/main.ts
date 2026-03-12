@@ -99,7 +99,7 @@ function updateThemeToggles(): void {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((btn) => {
     btn.textContent = isDark ? S.lightMode : S.darkMode;
-    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    btn.setAttribute('aria-label', isDark ? S.switchToLightMode : S.switchToDarkMode);
   });
 }
 
@@ -225,13 +225,11 @@ function renderTripHeader(tripId: string): void {
     </div>`;
 
   el('#btn-brand-home').addEventListener('click', () => {
-    history.pushState(null, '', '#/');
-    showHomeView();
+    window.location.hash = '/';
   });
 
   el('#btn-back').addEventListener('click', () => {
-    history.pushState(null, '', '#/');
-    showHomeView();
+    window.location.hash = '/';
   });
 
   el('#btn-share').addEventListener('click', async () => {
@@ -240,7 +238,7 @@ function renderTripHeader(tripId: string): void {
       await copyToClipboard(shareUrl);
       showToast(S.shareCopied);
     } catch {
-      prompt('Copy this share link:', shareUrl);
+      prompt(S.copyShareLinkPrompt, shareUrl);
     }
   });
 
@@ -340,7 +338,7 @@ function renderTripList(): void {
                     </span>
                   </div>
                   <div class="trip-card__actions">
-                    <button class="btn btn--ghost btn--sm trip-card__delete" data-id="${t.id}" aria-label="Delete ${escapeHtml(t.name)}">✕</button>
+                    <button class="btn btn--ghost btn--sm trip-card__delete" data-id="${t.id}" aria-label="${S.ariaDeleteTrip(t.name)}">✕</button>
                   </div>
                 </li>`;
               })
@@ -528,7 +526,7 @@ function renderPeople(): void {
               <div class="person-item__avatar" ${avatarStyle(p.id)}>${p.name.charAt(0).toUpperCase()}</div>
               <span class="person-item__name">${escapeHtml(p.name)}</span>
               ${expenses.length > 0 ? `<span class="balance ${balanceClass}">${balanceLabel}</span>` : ''}
-              <button class="btn btn--ghost btn--sm person-item__remove" data-id="${p.id}" aria-label="Remove ${escapeHtml(p.name)}">✕</button>
+              <button class="btn btn--ghost btn--sm person-item__remove" data-id="${p.id}" aria-label="${S.ariaRemovePerson(p.name)}">✕</button>
             </li>`;
           })
           .join('')}
@@ -642,9 +640,9 @@ function renderExpensesList(): void {
       <ul class="expense-list__items">
         ${expenses
           .map((expense) => {
-            const paidByName = nameMap.get(expense.paidById) ?? 'Unknown';
+            const paidByName = nameMap.get(expense.paidById) ?? S.unknown;
             const splitNames = expense.splitAmongIds
-              .map((id) => nameMap.get(id) ?? 'Unknown')
+              .map((id) => nameMap.get(id) ?? S.unknown)
               .join(', ');
             const perPerson = expense.amount / expense.splitAmongIds.length;
             return `
@@ -659,7 +657,7 @@ function renderExpensesList(): void {
                   ${formatCurrency(perPerson)}${S.perPersonSuffix} · ${S.split} ${escapeHtml(splitNames)}
                 </span>
               </div>
-              <button class="btn btn--ghost btn--sm expense-item__remove" data-id="${expense.id}" aria-label="Remove expense">✕</button>
+              <button class="btn btn--ghost btn--sm expense-item__remove" data-id="${expense.id}" aria-label="${S.ariaRemoveExpense}">✕</button>
             </li>`;
           })
           .join('')}
@@ -804,7 +802,26 @@ function renderSettle(): void {
 // Bootstrap
 // ---------------------------------------------------------------------------
 
+function initStaticStrings(): void {
+  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((node) => {
+    const key = node.dataset.i18n as keyof typeof S;
+    const val = S[key];
+    if (typeof val === 'string') node.textContent = val;
+  });
+  document.querySelectorAll<HTMLInputElement>('[data-i18n-placeholder]').forEach((node) => {
+    const key = node.dataset.i18nPlaceholder as keyof typeof S;
+    const val = S[key];
+    if (typeof val === 'string') node.placeholder = val;
+  });
+  document.querySelectorAll<HTMLElement>('[data-i18n-aria]').forEach((node) => {
+    const key = node.dataset.i18nAria as keyof typeof S;
+    const val = S[key];
+    if (typeof val === 'string') node.setAttribute('aria-label', val);
+  });
+}
+
 function init(): void {
+  initStaticStrings();
   initTheme();
 
   document.querySelectorAll('.theme-toggle').forEach((btn) => {
@@ -818,6 +835,7 @@ function init(): void {
 
   initCreateTripForm();
   window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('popstate', handleRoute);
   handleRoute();
 }
 
