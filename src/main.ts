@@ -190,10 +190,10 @@ function renderHomeHeader(): void {
         <span class="hero__name">${S.appName}</span>
       </div>
       <div class="hero__bubbles" aria-hidden="true">
-        <span class="hero__bubble hero__bubble--1">✈️</span>
+        <span class="hero__bubble hero__bubble--1">🏔️</span>
         <span class="hero__bubble hero__bubble--2">🏖️</span>
         <span class="hero__bubble hero__bubble--3">🗺️</span>
-        <span class="hero__bubble hero__bubble--4">🏔️</span>
+        <span class="hero__bubble hero__bubble--4">⛳️</span>
         <span class="hero__bubble hero__bubble--5">🧳</span>
       </div>
       <div class="hero__accent"></div>

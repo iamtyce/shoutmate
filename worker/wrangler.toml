@@ -1,0 +1,8 @@
+name = "shoutmate-share"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[[kv_namespaces]]
+binding = "TRIPS"
+id = "9f22129115674d0e977fae593ea432aa"
+preview_id = "0fd8f18ca50d49448da651c3f35f1d14"

@@ -1,7 +1,7 @@
 export const S = {
   // App identity
   appName: 'ShoutMate',
-  appTagline: 'ShoutMate · Split costs, not friendships.',
+  appTagline: '© ShoutMate 2026',
 
   // Hero
   heroHeading: 'Trips sorted.<br/>Mates still mates.',
