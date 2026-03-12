@@ -100,6 +100,7 @@ function showHomeView(): void {
   el('#view-home').hidden = false;
   el('#view-trip').hidden = true;
   el('.header').classList.remove('header--trip');
+  el('.header').classList.add('header--home');
   renderHomeHeader();
   renderTripList();
 }
@@ -108,6 +109,7 @@ function showTripView(tripId: string): void {
   setActiveTrip(tripId);
   el('#view-home').hidden = true;
   el('#view-trip').hidden = false;
+  el('.header').classList.remove('header--home');
   el('.header').classList.add('header--trip');
   renderTripHeader(tripId);
 
@@ -132,11 +134,22 @@ function showTripView(tripId: string): void {
 function renderHomeHeader(): void {
   const inner = el<HTMLElement>('.header__inner');
   inner.innerHTML = `
-    <div class="header__brand">
-      <span class="header__logo">⛺</span>
-      <h1 class="header__title">Tabbo</h1>
-    </div>
-    <p class="header__tagline">Split costs, stay friends.</p>`;
+    <section class="hero">
+      <div class="hero__brand">
+        <span class="hero__logo">⛺</span>
+        <span class="hero__name">ShoutMate</span>
+      </div>
+      <div class="hero__bubbles" aria-hidden="true">
+        <span class="hero__bubble hero__bubble--1">✈️</span>
+        <span class="hero__bubble hero__bubble--2">🏖️</span>
+        <span class="hero__bubble hero__bubble--3">🗺️</span>
+        <span class="hero__bubble hero__bubble--4">🏔️</span>
+        <span class="hero__bubble hero__bubble--5">🧳</span>
+      </div>
+      <div class="hero__accent"></div>
+      <h1 class="hero__heading">Your trips,<br>perfectly split.</h1>
+      <p class="hero__sub">Plan adventures with friends without the awkward money talk.<br />Add expenses as you go, settle up in seconds.</p>
+    </section>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -148,6 +161,10 @@ function renderTripHeader(tripId: string): void {
   const inner = el<HTMLElement>('.header__inner');
 
   inner.innerHTML = `
+    <div class="header__brand-bar">
+      <span class="header__logo">⛺</span>
+      <span class="header__brand-name">ShoutMate</span>
+    </div>
     <div class="header__top">
       <button class="btn btn--back" id="btn-back">← Trips</button>
       <button class="btn btn--share" id="btn-share">Share link</button>
@@ -353,6 +370,7 @@ function handleShareImport(payload: string): void {
   el('#view-home').hidden = false;
   el('#view-trip').hidden = true;
   el('.header').classList.remove('header--trip');
+  el('.header').classList.add('header--home');
   renderHomeHeader();
 
   const total = totalExpenses(decoded.state.expenses);

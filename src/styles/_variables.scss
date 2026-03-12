@@ -1,28 +1,32 @@
-// Colors
-$color-bg: #f4f7f5;
+// Colors — light travel sky palette (inspired by the design exploration)
+$color-bg: #eaf4fc;
 $color-surface: #ffffff;
 $color-surface-raised: #ffffff;
 
-$color-primary: #2d6a4f;
-$color-primary-dark: #1b4332;
-$color-primary-light: #52b788;
-$color-primary-xlight: #d8f3dc;
+// Primary — vibrant cerulean blue (buttons, active states)
+$color-primary: #1e72c8;
+$color-primary-dark: #1558a8;
+$color-primary-light: #5aadf0;
+$color-primary-xlight: #dceffe;
 
-$color-text: #1b1b1e;
-$color-text-secondary: #5a6472;
-$color-text-muted: #8a97a4;
+// Accent — warm coral (decorative highlights only)
+$color-accent: #ff6435;
 
-$color-border: #e2e8e4;
+$color-text: #0c1d2e;
+$color-text-secondary: #4a6274;
+$color-text-muted: #8aabbe;
+
+$color-border: #cde4f5;
 $color-border-focus: $color-primary-light;
 
-$color-positive: #1a7f37;
-$color-positive-bg: #d1fae5;
-$color-negative: #b91c1c;
-$color-negative-bg: #fee2e2;
+$color-positive: #0a7c52;
+$color-positive-bg: #d4f5e7;
+$color-negative: #c0392b;
+$color-negative-bg: #fde8e8;
 $color-neutral: $color-text-muted;
-$color-neutral-bg: #f1f5f3;
+$color-neutral-bg: #e4f1fa;
 
-$color-danger: #dc2626;
+$color-danger: #c0392b;
 
 // Typography
 $font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -39,7 +43,7 @@ $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
 
-$line-height-tight: 1.25;
+$line-height-tight: 1.2;
 $line-height-normal: 1.5;
 
 // Spacing
@@ -52,22 +56,23 @@ $space-6: 1.5rem;
 $space-8: 2rem;
 $space-10: 2.5rem;
 $space-12: 3rem;
+$space-16: 4rem;
 
-// Border radius
-$radius-sm: 6px;
-$radius-md: 10px;
-$radius-lg: 16px;
+// Border radius — large and friendly
+$radius-sm: 10px;
+$radius-md: 16px;
+$radius-lg: 24px;
 $radius-full: 9999px;
 
-// Shadows
-$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-$shadow-focus: 0 0 0 3px rgba(82, 183, 136, 0.35);
+// Shadows — soft blue-tinted, very diffuse
+$shadow-sm: 0 2px 12px rgba(12, 48, 80, 0.06);
+$shadow-md: 0 8px 32px rgba(12, 48, 80, 0.09), 0 2px 8px rgba(12, 48, 80, 0.04);
+$shadow-focus: 0 0 0 3px rgba(90, 173, 240, 0.45);
 
 // Layout
 $max-width: 600px;
 $header-height: 80px;
-$tab-height: 56px;
+$tab-height: 64px;
 
 // Transitions
 $transition-fast: 150ms ease;

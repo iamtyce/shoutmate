@@ -1,6 +1,6 @@
 import type { AppState, Expense, Trip, TripRegistry } from './types';
 
-const REGISTRY_KEY = 'tabbo_trips';
+const REGISTRY_KEY = 'shoutmate_trips';
 
 function defaultAppState(): AppState {
   return { participants: [], expenses: [], currency: 'AUD' };

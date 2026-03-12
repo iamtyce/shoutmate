@@ -12,45 +12,51 @@
 }
 
 // ---------------------------------------------------------------------------
-// Header
+// Header — base + variants
 // ---------------------------------------------------------------------------
 
 .header {
-  background: linear-gradient(135deg, $color-primary-dark 0%, $color-primary 100%);
-  color: #fff;
-  padding: $space-5 $space-4;
-
   &__inner {
     max-width: $max-width;
     margin: 0 auto;
   }
 
-  // ── Home header ──────────────────────────────────────────────
+  // ── Home variant: light sky gradient, dark text, hero height ──
+  &--home {
+    background: linear-gradient(175deg, #b8dff5 0%, #ceeaf9 35%, #e4f4fc 70%, $color-bg 100%);
+    color: $color-text;
+    padding: 0;
+  }
 
-  &__brand {
+  // ── Trip variant: light sky gradient, dark text (matches home aesthetic) ──
+  &--trip {
+    background: linear-gradient(175deg, #b8dff5 0%, #ceeaf9 35%, #e4f4fc 70%, $color-bg 100%);
+    color: $color-text;
+    padding: $space-4 $space-4 $space-5;
+  }
+
+  // ── Trip header elements ────────────────────────────────────────
+
+  &__brand-bar {
     display: flex;
     align-items: center;
-    gap: $space-3;
-    margin-bottom: $space-1;
+    gap: $space-2;
+    margin-bottom: $space-4;
+    padding-bottom: $space-3;
+    border-bottom: 1px solid $color-border;
   }
 
   &__logo {
-    font-size: $font-size-2xl;
+    font-size: $font-size-base;
     line-height: 1;
   }
 
-  &__title {
-    font-size: $font-size-2xl;
+  &__brand-name {
+    font-size: $font-size-base;
     font-weight: $font-weight-bold;
+    color: $color-text;
     letter-spacing: -0.02em;
   }
-
-  &__tagline {
-    font-size: $font-size-sm;
-    color: rgba(255, 255, 255, 0.72);
-  }
-
-  // ── Trip header ──────────────────────────────────────────────
 
   &__top {
     display: flex;
@@ -69,7 +75,7 @@
   &__trip-name {
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    color: #fff;
+    color: $color-text;
     cursor: pointer;
     border-radius: $radius-sm;
     padding: $space-1 $space-2;
@@ -81,13 +87,13 @@
     max-width: 200px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.05);
     }
 
     &--editing {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      color: #fff;
+      background: $color-surface;
+      border: 1.5px solid $color-border;
+      color: $color-text;
       font-family: $font-family;
       font-size: $font-size-lg;
       font-weight: $font-weight-bold;
@@ -98,12 +104,13 @@
       width: 200px;
 
       &:focus {
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+        border-color: $color-primary;
+        box-shadow: $shadow-focus;
       }
     }
   }
 
-  // ── Currency selector (shared) ────────────────────────────────
+  // ── Currency selector ─────────────────────────────────────────
 
   &__currency {
     display: flex;
@@ -114,7 +121,7 @@
 
   &__currency-label {
     font-size: $font-size-xs;
-    color: rgba(255, 255, 255, 0.6);
+    color: $color-text-secondary;
     font-weight: $font-weight-medium;
     white-space: nowrap;
   }
@@ -122,33 +129,33 @@
   &__currency-select {
     height: 28px;
     padding: 0 $space-5 0 $space-2;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1.5px solid $color-border;
     border-radius: $radius-full;
-    background: rgba(255, 255, 255, 0.15);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background: $color-surface;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a6274' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right $space-2 center;
-    color: #fff;
+    color: $color-text;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
     font-family: $font-family;
     appearance: none;
     cursor: pointer;
-    transition: background $transition-fast, border-color $transition-fast;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.25);
-      border-color: rgba(255, 255, 255, 0.5);
+      border-color: $color-primary-light;
     }
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+      border-color: $color-primary;
+      box-shadow: $shadow-focus;
     }
 
     option {
-      background: $color-primary-dark;
-      color: #fff;
+      background: $color-surface;
+      color: $color-text;
     }
   }
 }
@@ -156,170 +163,130 @@
 // ── Back / Share buttons ──────────────────────────────────────────
 
 .btn--back {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: $color-surface;
+  color: $color-text-secondary;
+  border: 1.5px solid $color-border;
   border-radius: $radius-full;
   height: 32px;
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
   padding: 0 $space-4;
+  box-shadow: $shadow-sm;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: $color-neutral-bg;
+    color: $color-text;
+    border-color: $color-primary-light;
   }
 }
 
 .btn--share {
-  background: rgba(255, 255, 255, 0.15);
+  background: $color-primary;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: none;
   border-radius: $radius-full;
   height: 32px;
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
   padding: 0 $space-4;
+  box-shadow: 0 2px 8px rgba(30, 114, 200, 0.3);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: $color-primary-dark;
   }
 }
 
-// ── Trip list ─────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// Hero section (home screen)
+// ---------------------------------------------------------------------------
 
-.trip-list {
-  display: flex;
-  flex-direction: column;
-  gap: $space-2;
-}
-
-.trip-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-3;
-  padding: $space-4;
-  border-radius: $radius-md;
-  background: $color-bg;
-  cursor: pointer;
-  transition: background $transition-fast, box-shadow $transition-fast;
-
-  &:hover {
-    background: color.adjust($color-bg, $lightness: -2%);
-    box-shadow: $shadow-sm;
-  }
-
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: $space-1;
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__name {
-    font-weight: $font-weight-semibold;
-    font-size: $font-size-base;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__meta {
-    font-size: $font-size-xs;
-    color: $color-text-muted;
-  }
-
-  &__actions {
-    flex-shrink: 0;
-  }
-
-  &__delete {
-    opacity: 0;
-    transition: opacity $transition-fast;
-
-    .trip-card:hover & {
-      opacity: 1;
-    }
-  }
-}
-
-@media (hover: none) {
-  .trip-card__delete {
-    opacity: 1 !important;
-  }
-}
-
-// ── Import card ───────────────────────────────────────────────────
-
-.import-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.hero {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $space-10 $space-6 $space-8;
   text-align: center;
-  gap: $space-4;
+  position: relative;
 
-  &__icon {
-    font-size: 2.5rem;
+  &__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    margin-bottom: $space-8;
+  }
+
+  &__logo {
+    font-size: $font-size-xl;
+    line-height: 1;
   }
 
   &__name {
-    font-size: $font-size-lg;
+    font-size: $font-size-xl;
     font-weight: $font-weight-bold;
     color: $color-text;
+    letter-spacing: -0.02em;
   }
 
-  &__stats {
+  &__bubbles {
+    position: relative;
+    height: 110px;
+    margin-bottom: $space-8;
+  }
+
+  &__bubble {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: $radius-full;
+    background: $color-surface;
+    box-shadow: $shadow-md;
     display: flex;
-    gap: $space-3;
-    font-size: $font-size-sm;
-    color: $color-text-muted;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    line-height: 1;
+    animation: float 3s ease-in-out infinite;
 
-    li {
-      display: flex;
-      align-items: center;
-      gap: $space-1;
+    &--1 { left: 4%;   top: 0;   animation-delay: 0s; }
+    &--2 { left: 22%;  top: 40px; animation-delay: 0.4s; }
+    &--3 { left: 43%;  top: 8px;  animation-delay: 0.8s; width: 72px; height: 72px; font-size: 2rem; }
+    &--4 { right: 18%; top: 35px; animation-delay: 0.2s; }
+    &--5 { right: 2%;  top: 4px;  animation-delay: 0.6s; }
+  }
 
-      &:not(:last-child)::after {
-        content: '·';
-        margin-left: $space-3;
-        color: $color-border;
-      }
+  &__accent {
+    width: 36px;
+    height: 4px;
+    background: $color-accent;
+    border-radius: $radius-full;
+    margin: 0 auto $space-5;
+  }
+
+  &__heading {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text;
+    line-height: $line-height-tight;
+    letter-spacing: -0.025em;
+    margin-bottom: $space-4;
+  }
+
+  &__sub {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    line-height: 1.65;
+    max-width: 340px;
+    margin: 0 auto;
+
+    @media (min-width: 600px) {
+      max-width: 500px;
     }
-  }
-
-  &__actions {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
   }
 }
 
-// ── Toast notification ────────────────────────────────────────────
-
-.toast {
-  position: fixed;
-  bottom: $space-6;
-  left: 50%;
-  transform: translateX(-50%) translateY(16px);
-  background: $color-text;
-  color: #fff;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  padding: $space-3 $space-5;
-  border-radius: $radius-full;
-  box-shadow: $shadow-md;
-  opacity: 0;
-  transition: opacity $transition-base, transform $transition-base;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: 100;
-
-  &--visible {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
 }
 
 // ---------------------------------------------------------------------------
@@ -329,11 +296,14 @@
 .tabs {
   display: flex;
   background: $color-surface;
-  border-bottom: 1px solid $color-border;
+  border-bottom: none;
+  border-top: 1px solid $color-border;
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: $shadow-sm;
+  padding: $space-2 $space-3;
+  gap: $space-2;
+  box-shadow: 0 2px 12px rgba(12, 48, 80, 0.06);
 
   &__btn {
     flex: 1;
@@ -342,20 +312,23 @@
     align-items: center;
     justify-content: center;
     gap: $space-1;
-    padding: $space-3 $space-2;
+    padding: $space-2 $space-3;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
     color: $color-text-muted;
-    border-bottom: 2px solid transparent;
-    transition: color $transition-fast, border-color $transition-fast;
+    border-radius: $radius-lg;
+    border-bottom: none;
+    transition: background $transition-fast, color $transition-fast;
 
     &:hover:not(&--active) {
       color: $color-text-secondary;
+      background: $color-neutral-bg;
     }
 
     &--active {
+      background: $color-primary-xlight;
       color: $color-primary;
-      border-bottom-color: $color-primary;
+      font-weight: $font-weight-semibold;
     }
   }
 
@@ -370,7 +343,11 @@
 
 .main {
   flex: 1;
-  padding: $space-4;
+  padding: $space-6 $space-4 $space-4;
+}
+
+#home-content:not(:empty) {
+  margin-top: $space-4;
 }
 
 .panel {
@@ -390,15 +367,15 @@
 }
 
 // ---------------------------------------------------------------------------
-// Cards
+// Cards — borderless, soft shadow
 // ---------------------------------------------------------------------------
 
 .card {
   background: $color-surface;
   border-radius: $radius-lg;
-  padding: $space-5;
-  box-shadow: $shadow-sm;
-  border: 1px solid $color-border;
+  padding: $space-6;
+  box-shadow: $shadow-md;
+  border: none;
 
   &__title {
     font-size: $font-size-md;
@@ -459,14 +436,14 @@
   &__input,
   &__select {
     width: 100%;
-    height: 44px;
+    height: 46px;
     padding: 0 $space-4;
     border: 1.5px solid $color-border;
     border-radius: $radius-md;
     background: $color-bg;
     color: $color-text;
     font-size: $font-size-base;
-    transition: border-color $transition-fast, box-shadow $transition-fast;
+    transition: border-color $transition-fast, box-shadow $transition-fast, background $transition-fast;
     appearance: none;
 
     &::placeholder {
@@ -475,14 +452,14 @@
 
     &:focus {
       outline: none;
-      border-color: $color-primary-light;
+      border-color: $color-primary;
       box-shadow: $shadow-focus;
       background: $color-surface;
     }
   }
 
   &__select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6472' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a6274' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right $space-3 center;
     padding-right: $space-10;
@@ -533,7 +510,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Buttons
+// Buttons — all pill-shaped
 // ---------------------------------------------------------------------------
 
 .btn {
@@ -541,9 +518,9 @@
   align-items: center;
   justify-content: center;
   gap: $space-2;
-  height: 44px;
-  padding: 0 $space-5;
-  border-radius: $radius-md;
+  height: 46px;
+  padding: 0 $space-6;
+  border-radius: $radius-full;
   font-size: $font-size-base;
   font-weight: $font-weight-semibold;
   transition: background $transition-fast, color $transition-fast, box-shadow $transition-fast, transform $transition-fast;
@@ -556,9 +533,11 @@
   &--primary {
     background: $color-primary;
     color: #fff;
+    box-shadow: 0 4px 14px rgba(30, 114, 200, 0.35);
 
     &:hover {
       background: $color-primary-dark;
+      box-shadow: 0 6px 18px rgba(30, 114, 200, 0.45);
     }
 
     &:focus-visible {
@@ -590,7 +569,6 @@
     height: 32px;
     padding: 0 $space-3;
     font-size: $font-size-sm;
-    border-radius: $radius-sm;
   }
 
   &--full {
@@ -622,10 +600,10 @@
   }
 
   &__avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: $radius-full;
-    background: $color-primary;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
     color: #fff;
     display: flex;
     align-items: center;
@@ -633,11 +611,13 @@
     font-size: $font-size-sm;
     font-weight: $font-weight-bold;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(30, 114, 200, 0.25);
 
     &--sm {
       width: 28px;
       height: 28px;
       font-size: $font-size-xs;
+      box-shadow: none;
     }
   }
 
@@ -658,7 +638,6 @@
   }
 }
 
-// On touch devices always show remove button
 @media (hover: none) {
   .person-item__remove {
     opacity: 1 !important;
@@ -672,7 +651,7 @@
 .balance {
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  padding: $space-1 $space-2;
+  padding: $space-1 $space-3;
   border-radius: $radius-full;
 
   &--positive {
@@ -848,6 +827,147 @@
     font-size: $font-size-md;
     font-weight: $font-weight-medium;
     color: $color-text-secondary;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Trip list (home)
+// ---------------------------------------------------------------------------
+
+.trip-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.trip-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: $color-bg;
+  cursor: pointer;
+  transition: background $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    background: color.adjust($color-bg, $lightness: -2%);
+    box-shadow: $shadow-sm;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-base;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+
+  &__actions {
+    flex-shrink: 0;
+  }
+
+  &__delete {
+    opacity: 0;
+    transition: opacity $transition-fast;
+
+    .trip-card:hover & {
+      opacity: 1;
+    }
+  }
+}
+
+@media (hover: none) {
+  .trip-card__delete {
+    opacity: 1 !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Import card
+// ---------------------------------------------------------------------------
+
+.import-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $space-4;
+
+  &__icon { font-size: 2.5rem; }
+
+  &__name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text;
+  }
+
+  &__stats {
+    display: flex;
+    gap: $space-3;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $space-1;
+
+      &:not(:last-child)::after {
+        content: '·';
+        margin-left: $space-3;
+        color: $color-border;
+      }
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Toast
+// ---------------------------------------------------------------------------
+
+.toast {
+  position: fixed;
+  bottom: $space-6;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: $color-text;
+  color: #fff;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  padding: $space-3 $space-5;
+  border-radius: $radius-full;
+  box-shadow: $shadow-md;
+  opacity: 0;
+  transition: opacity $transition-base, transform $transition-base;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 100;
+
+  &--visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 }
 
