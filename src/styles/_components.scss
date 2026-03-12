@@ -74,6 +74,25 @@
     letter-spacing: -0.02em;
   }
 
+  &__brand-home {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
+    .header__brand-name {
+      border-bottom: 2px solid transparent;
+      transition: border-color $transition-fast;
+    }
+
+    &:hover .header__brand-name {
+      border-bottom-color: $color-text;
+    }
+  }
+
   &__top {
     display: flex;
     align-items: center;
@@ -372,6 +391,13 @@
     margin: 0;
   }
 
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-shrink: 0;
+  }
+
   &__currency {
     display: flex;
     align-items: center;
@@ -401,6 +427,22 @@
       outline: none;
       border-color: $color-primary;
     }
+  }
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: $font-size-base;
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity $transition-fast;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -1098,5 +1140,210 @@
     font-size: $font-size-sm;
     max-width: 240px;
     line-height: $line-height-normal;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dark theme overrides
+// ---------------------------------------------------------------------------
+
+[data-theme="dark"] {
+  // Header gradients
+  .header--home {
+    background: linear-gradient(175deg, #091422 0%, #0d1b2e 40%, #0f2035 70%, var(--color-bg) 100%);
+  }
+
+  .header--trip {
+    background: #0d1b2e;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header__brand-name,
+  .header__trip-name,
+  .card__title,
+  .hero__name,
+  .hero__heading {
+    color: var(--color-text);
+  }
+
+  .hero__sub {
+    color: var(--color-text-secondary);
+  }
+
+  .hero__bubbles .hero__bubble {
+    background: var(--color-surface);
+  }
+
+  // Cards
+  .card {
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+  }
+
+  // Tabs
+  .tabs {
+    background: linear-gradient(to bottom, var(--color-bg) 70%, transparent 100%);
+
+    &__inner {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+    }
+
+    &__btn {
+      color: var(--color-text-muted);
+
+      &:hover:not(&--active) {
+        background: var(--color-neutral-bg);
+        color: var(--color-text-secondary);
+      }
+
+      &--active {
+        background: var(--color-primary-xlight);
+        color: var(--color-primary-light);
+      }
+    }
+  }
+
+  // Forms
+  .form__input,
+  .form__select {
+    background: var(--color-neutral-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+
+    &:focus {
+      border-color: var(--color-primary);
+    }
+  }
+
+  .form__label {
+    color: var(--color-text-secondary);
+  }
+
+  .checkbox-label {
+    color: var(--color-text-secondary);
+  }
+
+  // Person items
+  .person-item {
+    background: var(--color-neutral-bg);
+
+    &__name {
+      color: var(--color-text);
+    }
+  }
+
+  // Expense items
+  .expense-item {
+    border-bottom-color: var(--color-border);
+
+    &__desc {
+      color: var(--color-text);
+    }
+
+    &__meta,
+    &__split {
+      color: var(--color-text-muted);
+    }
+  }
+
+  // Balances
+  .balance--positive {
+    background: var(--color-positive-bg);
+    color: var(--color-positive);
+  }
+
+  .balance--negative {
+    background: var(--color-negative-bg);
+    color: var(--color-negative);
+  }
+
+  .balance--neutral {
+    color: var(--color-text-muted);
+  }
+
+  // Balance/settlement items
+  .balance-item__name,
+  .settlement-item__detail {
+    color: var(--color-text);
+  }
+
+  // Trip cards (home list)
+  .trip-card {
+    border-bottom-color: var(--color-border);
+
+    &__name {
+      color: var(--color-text);
+    }
+
+    &__meta {
+      color: var(--color-text-muted);
+    }
+
+    &:hover {
+      background: var(--color-neutral-bg);
+    }
+  }
+
+  // Card badge
+  .card__badge {
+    background: var(--color-primary-xlight);
+    color: var(--color-primary-light);
+  }
+
+  // Buttons
+  .btn--ghost {
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+
+    &:hover {
+      background: var(--color-neutral-bg);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  // Footer
+  .trip-footer {
+    border-top-color: var(--color-border);
+    background: var(--color-bg);
+
+    &__copy,
+    &__label {
+      color: var(--color-text-muted);
+    }
+
+    &__select {
+      background: transparent;
+      border-color: var(--color-border);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  // Toast
+  .toast {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  // Empty states
+  .empty-state {
+    color: var(--color-text-muted);
+  }
+
+  // Settle done
+  .settle-done {
+    color: var(--color-text-secondary);
+  }
+
+  // New trip card title
+  .card__title {
+    color: var(--color-text);
+  }
+
+  // Import card
+  .import-card__name {
+    color: var(--color-text);
   }
 }

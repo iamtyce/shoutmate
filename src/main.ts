@@ -17,6 +17,7 @@ import {
 import { calculateSettlements, calculateBalances, totalExpenses } from './calculator';
 import { parseRoute, navigate } from './router';
 import { encodeTripToShareUrl, decodeTripFromPayload } from './share';
+import { S } from './strings';
 // ---------------------------------------------------------------------------
 // Avatar colours — cycling palette of gradients
 // ---------------------------------------------------------------------------
@@ -73,6 +74,36 @@ function copyToClipboard(text: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Theme
+// ---------------------------------------------------------------------------
+
+function initTheme(): void {
+  const saved = localStorage.getItem('shoutmate_theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  updateThemeToggles();
+}
+
+function toggleTheme(): void {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('shoutmate_theme', 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('shoutmate_theme', 'dark');
+  }
+  updateThemeToggles();
+}
+
+function updateThemeToggles(): void {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((btn) => {
+    btn.textContent = isDark ? S.lightMode : S.darkMode;
+    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Routing
 // ---------------------------------------------------------------------------
 
@@ -110,6 +141,9 @@ function showHomeView(): void {
   el('.header').classList.add('header--home');
   renderHomeHeader();
   renderTripList();
+
+  const defaultCurrency = localStorage.getItem('shoutmate_default_currency') ?? 'AUD';
+  el<HTMLSelectElement>('#home-select-currency').value = defaultCurrency;
 }
 
 function showTripView(tripId: string): void {
@@ -153,7 +187,7 @@ function renderHomeHeader(): void {
     <section class="hero">
       <div class="hero__brand">
         <span class="hero__logo">⛺</span>
-        <span class="hero__name">ShoutMate</span>
+        <span class="hero__name">${S.appName}</span>
       </div>
       <div class="hero__bubbles" aria-hidden="true">
         <span class="hero__bubble hero__bubble--1">✈️</span>
@@ -163,9 +197,9 @@ function renderHomeHeader(): void {
         <span class="hero__bubble hero__bubble--5">🧳</span>
       </div>
       <div class="hero__accent"></div>
-      <h1 class="hero__heading">Trips sorted.<br/>Mates still mates.</h1>
-      <p class="hero__sub">Track shared expenses as you go and settle up in seconds.</p>
-      <p class="hero__sub">No accounts. No awkward money chats. Just a fair shout.</p>
+      <h1 class="hero__heading">${S.heroHeading}</h1>
+      <p class="hero__sub">${S.heroSub1}</p>
+      <p class="hero__sub">${S.heroSub2}</p>
     </section>`;
 }
 
@@ -179,14 +213,21 @@ function renderTripHeader(tripId: string): void {
 
   inner.innerHTML = `
     <div class="header__brand-bar">
-      <span class="header__logo">⛺</span>
-      <span class="header__brand-name">ShoutMate</span>
-      <button class="btn btn--share" id="btn-share">🔗 Share</button>
+      <button class="header__brand-home" id="btn-brand-home">
+        <span class="header__logo">⛺</span>
+        <span class="header__brand-name">${S.appName}</span>
+      </button>
+      <button class="btn btn--share" id="btn-share">${S.shareBtn}</button>
     </div>
     <div class="header__trip-row">
-      <h2 class="header__trip-name" id="trip-name-display" title="Click to rename">${escapeHtml(trip.name)}</h2>
-      <button class="btn btn--back" id="btn-back">← Back to trips</button>
+      <h2 class="header__trip-name" id="trip-name-display" title="${S.clickToRename}">${escapeHtml(trip.name)}</h2>
+      <button class="btn btn--back" id="btn-back">${S.backToTrips}</button>
     </div>`;
+
+  el('#btn-brand-home').addEventListener('click', () => {
+    history.pushState(null, '', '#/');
+    showHomeView();
+  });
 
   el('#btn-back').addEventListener('click', () => {
     history.pushState(null, '', '#/');
@@ -197,7 +238,7 @@ function renderTripHeader(tripId: string): void {
     const shareUrl = encodeTripToShareUrl(getTrip(tripId)!);
     try {
       await copyToClipboard(shareUrl);
-      showToast('Share link copied to clipboard!');
+      showToast(S.shareCopied);
     } catch {
       prompt('Copy this share link:', shareUrl);
     }
@@ -264,10 +305,10 @@ function renderTripList(): void {
     trips.length === 0
       ? `<div class="empty-state">
           <span class="empty-state__icon">🏕️</span>
-          <p>No trips yet. Create your first one above!</p>
+          <p>${S.noTripsYet}</p>
         </div>`
       : `<div class="card">
-          <h2 class="card__title">Your trips</h2>
+          <h2 class="card__title">${S.yourTrips}</h2>
           <ul class="trip-list">
             ${trips
               .map((t) => {
@@ -292,10 +333,10 @@ function renderTripList(): void {
                   <div class="trip-card__body">
                     <span class="trip-card__name">${escapeHtml(t.name)}</span>
                     <span class="trip-card__meta">
-                      ${peopleCount} ${peopleCount === 1 ? 'person' : 'people'}
-                      · ${expenseCount} ${expenseCount === 1 ? 'expense' : 'expenses'}
-                      ${totalFormatted ? `· ${totalFormatted} total` : ''}
-                      · Created ${date}
+                      ${peopleCount} ${peopleCount === 1 ? S.person : S.people}
+                      · ${expenseCount} ${expenseCount === 1 ? S.expense : S.expenses}
+                      ${totalFormatted ? `· ${totalFormatted} ${S.total}` : ''}
+                      · ${S.created} ${date}
                     </span>
                   </div>
                   <div class="trip-card__actions">
@@ -328,7 +369,7 @@ function renderTripList(): void {
     btn.addEventListener('click', () => {
       const id = btn.dataset.id!;
       const trip = getTrip(id);
-      if (trip && confirm(`Delete "${trip.name}"? This cannot be undone.`)) {
+      if (trip && confirm(S.confirmDeleteTrip(trip.name))) {
         deleteTrip(id);
         renderTripList();
       }
@@ -347,13 +388,16 @@ function initCreateTripForm(): void {
     const name = input.value.trim();
 
     if (!name) {
-      errorEl.textContent = 'Please enter a trip name.';
+      errorEl.textContent = S.errorTripNameRequired;
       input.focus();
       return;
     }
 
     const trip = createTrip(name);
     input.value = '';
+    const defaultCurrency = localStorage.getItem('shoutmate_default_currency') ?? 'AUD';
+    setActiveTrip(trip.id);
+    setCurrency(defaultCurrency);
     navigate(trip.id);
   });
 }
@@ -367,7 +411,7 @@ function handleShareImport(payload: string): void {
 
   if (!decoded) {
     showHomeView();
-    showToast('Invalid share link.');
+    showToast(S.invalidShareLink);
     return;
   }
 
@@ -389,16 +433,16 @@ function handleShareImport(payload: string): void {
   container.innerHTML = `
     <div class="card import-card">
       <div class="import-card__icon">🔗</div>
-      <h2 class="card__title">Trip invite</h2>
+      <h2 class="card__title">${S.tripInvite}</h2>
       <p class="import-card__name">${escapeHtml(decoded.name)}</p>
       <ul class="import-card__stats">
-        <li>${decoded.state.participants.length} ${decoded.state.participants.length === 1 ? 'person' : 'people'}</li>
-        <li>${decoded.state.expenses.length} ${decoded.state.expenses.length === 1 ? 'expense' : 'expenses'}</li>
-        <li>${totalFormatted} total</li>
+        <li>${decoded.state.participants.length} ${decoded.state.participants.length === 1 ? S.person : S.people}</li>
+        <li>${decoded.state.expenses.length} ${decoded.state.expenses.length === 1 ? S.expense : S.expenses}</li>
+        <li>${totalFormatted} ${S.total}</li>
       </ul>
       <div class="import-card__actions">
-        <button class="btn btn--primary btn--full" id="btn-import-trip">Save to my trips</button>
-        <button class="btn btn--ghost btn--full" id="btn-dismiss-import">Go to my trips</button>
+        <button class="btn btn--primary btn--full" id="btn-import-trip">${S.saveToMyTrips}</button>
+        <button class="btn btn--ghost btn--full" id="btn-dismiss-import">${S.goToMyTrips}</button>
       </div>
     </div>`;
 
@@ -457,7 +501,7 @@ function renderPeople(): void {
     list.innerHTML = `
       <div class="empty-state">
         <span class="empty-state__icon">👤</span>
-        <p>No one added yet. Start by adding your group.</p>
+        <p>${S.noOneYet}</p>
       </div>`;
     return;
   }
@@ -466,7 +510,7 @@ function renderPeople(): void {
 
   list.innerHTML = `
     <div class="card">
-      <h2 class="card__title">Group (${participants.length})</h2>
+      <h2 class="card__title">${S.group(participants.length)}</h2>
       <ul class="people-list__items">
         ${participants
           .map((p) => {
@@ -478,7 +522,7 @@ function renderPeople(): void {
             const balanceLabel =
               balance > 0.005 ? `+${formatCurrency(balance)}`
               : balance < -0.005 ? formatCurrency(balance)
-              : 'settled';
+              : S.settled;
             return `
             <li class="person-item" data-id="${p.id}">
               <div class="person-item__avatar" ${avatarStyle(p.id)}>${p.name.charAt(0).toUpperCase()}</div>
@@ -496,7 +540,7 @@ function renderPeople(): void {
       const id = btn.dataset.id!;
       const { participants: pp } = getState();
       const person = pp.find((p) => p.id === id);
-      if (person && confirm(`Remove ${person.name}? Any expenses they paid will also be removed.`)) {
+      if (person && confirm(S.confirmRemovePerson(person.name))) {
         removeParticipant(id);
         renderPeople();
         renderExpenseForm();
@@ -516,14 +560,14 @@ function initPeopleForm(): void {
     const name = input.value.trim();
 
     if (!name) {
-      errorEl.textContent = 'Please enter a name.';
+      errorEl.textContent = S.errorNameRequired;
       input.focus();
       return;
     }
 
     const { participants } = getState();
     if (participants.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
-      errorEl.textContent = 'That name is already in the group.';
+      errorEl.textContent = S.errorNameDuplicate;
       input.focus();
       return;
     }
@@ -557,7 +601,7 @@ function renderExpenseForm(): void {
   form.hidden = false;
 
   paidBySelect.innerHTML =
-    `<option value="">Select person</option>` +
+    `<option value="">${S.selectPerson}</option>` +
     participants.map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
 
   checkboxContainer.innerHTML = participants
@@ -582,7 +626,7 @@ function renderExpensesList(): void {
     list.innerHTML = `
       <div class="empty-state">
         <span class="empty-state__icon">💳</span>
-        <p>No expenses yet. Add your first one above.</p>
+        <p>${S.noExpensesYet}</p>
       </div>`;
     return;
   }
@@ -592,8 +636,8 @@ function renderExpensesList(): void {
   list.innerHTML = `
     <div class="card">
       <div class="card__header">
-        <h2 class="card__title">Expenses</h2>
-        <span class="card__badge">${formatCurrency(total)} total</span>
+        <h2 class="card__title">${S.expensesTitle}</h2>
+        <span class="card__badge">${formatCurrency(total)} ${S.total}</span>
       </div>
       <ul class="expense-list__items">
         ${expenses
@@ -610,9 +654,9 @@ function renderExpensesList(): void {
                 <span class="expense-item__amount">${formatCurrency(expense.amount)}</span>
               </div>
               <div class="expense-item__meta">
-                <span>Paid by <strong>${escapeHtml(paidByName)}</strong></span>
+                <span>${S.paidBy} <strong>${escapeHtml(paidByName)}</strong></span>
                 <span class="expense-item__split">
-                  ${formatCurrency(perPerson)}/person · Split: ${escapeHtml(splitNames)}
+                  ${formatCurrency(perPerson)}${S.perPersonSuffix} · ${S.split} ${escapeHtml(splitNames)}
                 </span>
               </div>
               <button class="btn btn--ghost btn--sm expense-item__remove" data-id="${expense.id}" aria-label="Remove expense">✕</button>
@@ -648,10 +692,10 @@ function initExpenseForm(): void {
       form.querySelectorAll<HTMLInputElement>('input[name="splitAmong"]:checked')
     ).map((cb) => cb.value);
 
-    if (!desc) { errorEl.textContent = 'Please enter a description.'; return; }
-    if (isNaN(amountRaw) || amountRaw <= 0) { errorEl.textContent = 'Please enter a valid amount greater than zero.'; return; }
-    if (!paidById) { errorEl.textContent = 'Please select who paid.'; return; }
-    if (checked.length === 0) { errorEl.textContent = 'Please select at least one person to split among.'; return; }
+    if (!desc) { errorEl.textContent = S.errorDescRequired; return; }
+    if (isNaN(amountRaw) || amountRaw <= 0) { errorEl.textContent = S.errorAmountInvalid; return; }
+    if (!paidById) { errorEl.textContent = S.errorPaidByRequired; return; }
+    if (checked.length === 0) { errorEl.textContent = S.errorSplitRequired; return; }
 
     addExpense({
       description: desc,
@@ -678,7 +722,7 @@ function renderSettle(): void {
     container.innerHTML = `
       <div class="empty-state">
         <span class="empty-state__icon">🏕️</span>
-        <p>Add people and expenses to see how to settle up.</p>
+        <p>${S.settleNoPeople}</p>
       </div>`;
     return;
   }
@@ -687,7 +731,7 @@ function renderSettle(): void {
     container.innerHTML = `
       <div class="empty-state">
         <span class="empty-state__icon">💸</span>
-        <p>No expenses logged yet. Add some expenses first.</p>
+        <p>${S.settleNoExpenses}</p>
       </div>`;
     return;
   }
@@ -700,8 +744,8 @@ function renderSettle(): void {
   container.innerHTML = `
     <div class="card">
       <div class="card__header">
-        <h2 class="card__title">Summary</h2>
-        <span class="card__badge">${formatCurrency(total)} total</span>
+        <h2 class="card__title">${S.summaryTitle}</h2>
+        <span class="card__badge">${formatCurrency(total)} ${S.total}</span>
       </div>
       <ul class="balance-list">
         ${participants
@@ -712,9 +756,9 @@ function renderSettle(): void {
               : balance < -0.005 ? 'balance--negative'
               : 'balance--neutral';
             const balanceLabel =
-              balance > 0.005 ? `is owed ${formatCurrency(balance)}`
-              : balance < -0.005 ? `owes ${formatCurrency(-balance)}`
-              : 'is settled up';
+              balance > 0.005 ? S.isOwed(formatCurrency(balance))
+              : balance < -0.005 ? S.owes(formatCurrency(-balance))
+              : S.isSettledUp;
             return `
             <li class="balance-item">
               <div class="person-item__avatar" ${avatarStyle(p.id)}>${p.name.charAt(0).toUpperCase()}</div>
@@ -729,10 +773,10 @@ function renderSettle(): void {
     ${settlements.length === 0
       ? `<div class="card settle-done">
           <span class="settle-done__icon">🎉</span>
-          <p>Everyone is settled up!</p>
+          <p>${S.settledUp}</p>
         </div>`
       : `<div class="card">
-          <h2 class="card__title">Payments to make</h2>
+          <h2 class="card__title">${S.paymentsTitle}</h2>
           <ul class="settlement-list">
             ${settlements
               .map(
@@ -744,7 +788,7 @@ function renderSettle(): void {
                   <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.toId)}>${nameMap.get(s.toId)?.charAt(0).toUpperCase() ?? '?'}</div>
                 </div>
                 <div class="settlement-item__detail">
-                  <span><strong>${escapeHtml(s.fromName)}</strong> pays <strong>${escapeHtml(s.toName)}</strong></span>
+                  <span><strong>${escapeHtml(s.fromName)}</strong> ${S.pays} <strong>${escapeHtml(s.toName)}</strong></span>
                   <span class="settlement-item__amount">${formatCurrency(s.amount)}</span>
                 </div>
               </li>`
@@ -761,6 +805,17 @@ function renderSettle(): void {
 // ---------------------------------------------------------------------------
 
 function init(): void {
+  initTheme();
+
+  document.querySelectorAll('.theme-toggle').forEach((btn) => {
+    btn.addEventListener('click', toggleTheme);
+  });
+
+  // Home footer currency — saves default preference
+  el('#home-select-currency').addEventListener('change', (e) => {
+    localStorage.setItem('shoutmate_default_currency', (e.target as HTMLSelectElement).value);
+  });
+
   initCreateTripForm();
   window.addEventListener('hashchange', handleRoute);
   handleRoute();

@@ -1,3 +1,39 @@
+:root {
+  --color-bg: #eaf4fc;
+  --color-surface: #ffffff;
+  --color-text: #0c1d2e;
+  --color-text-secondary: #4a6274;
+  --color-text-muted: #8aabbe;
+  --color-border: #cde4f5;
+  --color-primary: #1e72c8;
+  --color-primary-light: #5aadf0;
+  --color-primary-xlight: #dceffe;
+  --color-neutral-bg: #e4f1fa;
+  --color-positive: #0a7c52;
+  --color-positive-bg: #d4f5e7;
+  --color-negative: #c0392b;
+  --color-negative-bg: #fde8e8;
+  --shadow-md: 0 8px 32px rgba(12, 48, 80, 0.09), 0 2px 8px rgba(12, 48, 80, 0.04);
+}
+
+[data-theme="dark"] {
+  --color-bg: #0d1b2e;
+  --color-surface: #162032;
+  --color-text: #e2f0fb;
+  --color-text-secondary: #8bafc8;
+  --color-text-muted: #5a7a96;
+  --color-border: #1e3550;
+  --color-primary: #3b8ee8;
+  --color-primary-light: #5aadf0;
+  --color-primary-xlight: #1a3a5c;
+  --color-neutral-bg: #1a2e40;
+  --color-positive: #4ade80;
+  --color-positive-bg: #0a2e1e;
+  --color-negative: #f87171;
+  --color-negative-bg: #2e0a0a;
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 // Colors — light travel sky palette (inspired by the design exploration)
 $color-bg: #eaf4fc;
 $color-surface: #ffffff;
