@@ -113,7 +113,7 @@ function handleRoute(): void {
   const route = parseRoute(window.location.hash);
 
   if (route.view === 'share') {
-    handleShareImport(route.payload);
+    void handleShareImport(route.payload);
     return;
   }
 
@@ -233,7 +233,7 @@ function renderTripHeader(tripId: string): void {
   });
 
   el('#btn-share').addEventListener('click', async () => {
-    const shareUrl = encodeTripToShareUrl(getTrip(tripId)!);
+    const shareUrl = await encodeTripToShareUrl(getTrip(tripId)!);
     try {
       await copyToClipboard(shareUrl);
       showToast(S.shareCopied);
@@ -404,8 +404,8 @@ function initCreateTripForm(): void {
 // Share import view
 // ---------------------------------------------------------------------------
 
-function handleShareImport(payload: string): void {
-  const decoded = decodeTripFromPayload(payload);
+async function handleShareImport(payload: string): Promise<void> {
+  const decoded = await decodeTripFromPayload(payload);
 
   if (!decoded) {
     showHomeView();
