@@ -18,8 +18,26 @@ import { calculateSettlements, calculateBalances, totalExpenses } from './calcul
 import { parseRoute, navigate } from './router';
 import { encodeTripToShareUrl, decodeTripFromPayload } from './share';
 // ---------------------------------------------------------------------------
-// Currency config
+// Avatar colours — cycling palette of gradients
 // ---------------------------------------------------------------------------
+
+const AVATAR_COLORS = [
+  'linear-gradient(135deg, #1e72c8 0%, #5aadf0 100%)',   // blue
+  'linear-gradient(135deg, #7c3aed 0%, #c084fc 100%)',   // purple
+  'linear-gradient(135deg, #e05c2a 0%, #f59460 100%)',   // orange
+  'linear-gradient(135deg, #0e9f6e 0%, #6ee7b7 100%)',   // green
+  'linear-gradient(135deg, #e53e5e 0%, #f9a8bc 100%)',   // pink
+  'linear-gradient(135deg, #d97706 0%, #fcd34d 100%)',   // amber
+  'linear-gradient(135deg, #0891b2 0%, #67e8f9 100%)',   // cyan
+  'linear-gradient(135deg, #be185d 0%, #f0abca 100%)',   // rose
+];
+
+function avatarStyle(participantId: string): string {
+  const { participants } = getState();
+  const index = participants.findIndex((p) => p.id === participantId);
+  const gradient = AVATAR_COLORS[(index < 0 ? 0 : index) % AVATAR_COLORS.length];
+  return `style="background: ${gradient}; box-shadow: none;"`;
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -170,7 +188,10 @@ function renderTripHeader(tripId: string): void {
       <button class="btn btn--back" id="btn-back">← Back to trips</button>
     </div>`;
 
-  el('#btn-back').addEventListener('click', () => navigate(''));
+  el('#btn-back').addEventListener('click', () => {
+    history.pushState(null, '', '#/');
+    showHomeView();
+  });
 
   el('#btn-share').addEventListener('click', async () => {
     const shareUrl = encodeTripToShareUrl(getTrip(tripId)!);
@@ -460,7 +481,7 @@ function renderPeople(): void {
               : 'settled';
             return `
             <li class="person-item" data-id="${p.id}">
-              <div class="person-item__avatar">${p.name.charAt(0).toUpperCase()}</div>
+              <div class="person-item__avatar" ${avatarStyle(p.id)}>${p.name.charAt(0).toUpperCase()}</div>
               <span class="person-item__name">${escapeHtml(p.name)}</span>
               ${expenses.length > 0 ? `<span class="balance ${balanceClass}">${balanceLabel}</span>` : ''}
               <button class="btn btn--ghost btn--sm person-item__remove" data-id="${p.id}" aria-label="Remove ${escapeHtml(p.name)}">✕</button>
@@ -696,7 +717,7 @@ function renderSettle(): void {
               : 'is settled up';
             return `
             <li class="balance-item">
-              <div class="person-item__avatar">${p.name.charAt(0).toUpperCase()}</div>
+              <div class="person-item__avatar" ${avatarStyle(p.id)}>${p.name.charAt(0).toUpperCase()}</div>
               <span class="balance-item__name">${escapeHtml(p.name)}</span>
               <span class="balance ${balanceClass}">${balanceLabel}</span>
             </li>`;
@@ -718,9 +739,9 @@ function renderSettle(): void {
                 (s) => `
               <li class="settlement-item">
                 <div class="settlement-item__avatars">
-                  <div class="person-item__avatar person-item__avatar--sm">${nameMap.get(s.fromId)?.charAt(0).toUpperCase() ?? '?'}</div>
+                  <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.fromId)}>${nameMap.get(s.fromId)?.charAt(0).toUpperCase() ?? '?'}</div>
                   <span class="settlement-item__arrow">→</span>
-                  <div class="person-item__avatar person-item__avatar--sm">${nameMap.get(s.toId)?.charAt(0).toUpperCase() ?? '?'}</div>
+                  <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.toId)}>${nameMap.get(s.toId)?.charAt(0).toUpperCase() ?? '?'}</div>
                 </div>
                 <div class="settlement-item__detail">
                   <span><strong>${escapeHtml(s.fromName)}</strong> pays <strong>${escapeHtml(s.toName)}</strong></span>
