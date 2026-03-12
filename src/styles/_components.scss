@@ -1,0 +1,877 @@
+@use 'variables' as *;
+@use 'sass:color';
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+// ---------------------------------------------------------------------------
+// Header
+// ---------------------------------------------------------------------------
+
+.header {
+  background: linear-gradient(135deg, $color-primary-dark 0%, $color-primary 100%);
+  color: #fff;
+  padding: $space-5 $space-4;
+
+  &__inner {
+    max-width: $max-width;
+    margin: 0 auto;
+  }
+
+  // ── Home header ──────────────────────────────────────────────
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-bottom: $space-1;
+  }
+
+  &__logo {
+    font-size: $font-size-2xl;
+    line-height: 1;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.02em;
+  }
+
+  &__tagline {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  // ── Trip header ──────────────────────────────────────────────
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $space-3;
+  }
+
+  &__trip-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-4;
+  }
+
+  &__trip-name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: #fff;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    padding: $space-1 $space-2;
+    margin: (-$space-1) (-$space-2);
+    transition: background $transition-fast;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    &--editing {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      font-family: $font-family;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      height: auto;
+      padding: $space-1 $space-2;
+      border-radius: $radius-sm;
+      outline: none;
+      width: 200px;
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+
+  // ── Currency selector (shared) ────────────────────────────────
+
+  &__currency {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+
+  &__currency-label {
+    font-size: $font-size-xs;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+  }
+
+  &__currency-select {
+    height: 28px;
+    padding: 0 $space-5 0 $space-2;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: $radius-full;
+    background: rgba(255, 255, 255, 0.15);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.8)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $space-2 center;
+    color: #fff;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    font-family: $font-family;
+    appearance: none;
+    cursor: pointer;
+    transition: background $transition-fast, border-color $transition-fast;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+    }
+
+    option {
+      background: $color-primary-dark;
+      color: #fff;
+    }
+  }
+}
+
+// ── Back / Share buttons ──────────────────────────────────────────
+
+.btn--back {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: $radius-full;
+  height: 32px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  padding: 0 $space-4;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.btn--share {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: $radius-full;
+  height: 32px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  padding: 0 $space-4;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+// ── Trip list ─────────────────────────────────────────────────────
+
+.trip-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.trip-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: $color-bg;
+  cursor: pointer;
+  transition: background $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    background: color.adjust($color-bg, $lightness: -2%);
+    box-shadow: $shadow-sm;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-base;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+
+  &__actions {
+    flex-shrink: 0;
+  }
+
+  &__delete {
+    opacity: 0;
+    transition: opacity $transition-fast;
+
+    .trip-card:hover & {
+      opacity: 1;
+    }
+  }
+}
+
+@media (hover: none) {
+  .trip-card__delete {
+    opacity: 1 !important;
+  }
+}
+
+// ── Import card ───────────────────────────────────────────────────
+
+.import-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $space-4;
+
+  &__icon {
+    font-size: 2.5rem;
+  }
+
+  &__name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text;
+  }
+
+  &__stats {
+    display: flex;
+    gap: $space-3;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $space-1;
+
+      &:not(:last-child)::after {
+        content: '·';
+        margin-left: $space-3;
+        color: $color-border;
+      }
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+}
+
+// ── Toast notification ────────────────────────────────────────────
+
+.toast {
+  position: fixed;
+  bottom: $space-6;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: $color-text;
+  color: #fff;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  padding: $space-3 $space-5;
+  border-radius: $radius-full;
+  box-shadow: $shadow-md;
+  opacity: 0;
+  transition: opacity $transition-base, transform $transition-base;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 100;
+
+  &--visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tabs
+// ---------------------------------------------------------------------------
+
+.tabs {
+  display: flex;
+  background: $color-surface;
+  border-bottom: 1px solid $color-border;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: $shadow-sm;
+
+  &__btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $space-1;
+    padding: $space-3 $space-2;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+    border-bottom: 2px solid transparent;
+    transition: color $transition-fast, border-color $transition-fast;
+
+    &:hover:not(&--active) {
+      color: $color-text-secondary;
+    }
+
+    &--active {
+      color: $color-primary;
+      border-bottom-color: $color-primary;
+    }
+  }
+
+  &__icon {
+    font-size: $font-size-md;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Main / Panels
+// ---------------------------------------------------------------------------
+
+.main {
+  flex: 1;
+  padding: $space-4;
+}
+
+.panel {
+  display: none;
+  max-width: $max-width;
+  margin: 0 auto;
+
+  &--active {
+    display: block;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Cards
+// ---------------------------------------------------------------------------
+
+.card {
+  background: $color-surface;
+  border-radius: $radius-lg;
+  padding: $space-5;
+  box-shadow: $shadow-sm;
+  border: 1px solid $color-border;
+
+  &__title {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text;
+    margin-bottom: $space-4;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $space-4;
+
+    .card__title {
+      margin-bottom: 0;
+    }
+  }
+
+  &__badge {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    background: $color-primary-xlight;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Forms
+// ---------------------------------------------------------------------------
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  &__row {
+    display: flex;
+    gap: $space-3;
+    align-items: flex-end;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    flex: 1;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+  }
+
+  &__input,
+  &__select {
+    width: 100%;
+    height: 44px;
+    padding: 0 $space-4;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    background: $color-bg;
+    color: $color-text;
+    font-size: $font-size-base;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    appearance: none;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary-light;
+      box-shadow: $shadow-focus;
+      background: $color-surface;
+    }
+  }
+
+  &__select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6472' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $space-3 center;
+    padding-right: $space-10;
+    cursor: pointer;
+  }
+
+  &__error {
+    font-size: $font-size-sm;
+    color: $color-danger;
+    min-height: 1.25em;
+    margin-top: -$space-2;
+  }
+}
+
+// Checkboxes
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-full;
+  cursor: pointer;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  transition: border-color $transition-fast, background $transition-fast, color $transition-fast;
+  user-select: none;
+
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    accent-color: $color-primary;
+    cursor: pointer;
+  }
+
+  &:has(input:checked) {
+    border-color: $color-primary;
+    background: $color-primary-xlight;
+    color: $color-primary-dark;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Buttons
+// ---------------------------------------------------------------------------
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  height: 44px;
+  padding: 0 $space-5;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  transition: background $transition-fast, color $transition-fast, box-shadow $transition-fast, transform $transition-fast;
+  white-space: nowrap;
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &--primary {
+    background: $color-primary;
+    color: #fff;
+
+    &:hover {
+      background: $color-primary-dark;
+    }
+
+    &:focus-visible {
+      box-shadow: $shadow-focus;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $color-text-muted;
+    border: 1.5px solid $color-border;
+
+    &:hover {
+      background: $color-neutral-bg;
+      color: $color-text;
+    }
+  }
+
+  &--danger {
+    background: $color-negative-bg;
+    color: $color-negative;
+
+    &:hover {
+      background: color.adjust($color-negative-bg, $lightness: -5%);
+    }
+  }
+
+  &--sm {
+    height: 32px;
+    padding: 0 $space-3;
+    font-size: $font-size-sm;
+    border-radius: $radius-sm;
+  }
+
+  &--full {
+    width: 100%;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// People list
+// ---------------------------------------------------------------------------
+
+.people-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.person-item {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3;
+  border-radius: $radius-md;
+  background: $color-bg;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: color.adjust($color-bg, $lightness: -2%);
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-full;
+    background: $color-primary;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    flex-shrink: 0;
+
+    &--sm {
+      width: 28px;
+      height: 28px;
+      font-size: $font-size-xs;
+    }
+  }
+
+  &__name {
+    flex: 1;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-base;
+  }
+
+  &__remove {
+    opacity: 0;
+    transition: opacity $transition-fast;
+    flex-shrink: 0;
+
+    .person-item:hover & {
+      opacity: 1;
+    }
+  }
+}
+
+// On touch devices always show remove button
+@media (hover: none) {
+  .person-item__remove {
+    opacity: 1 !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Balance indicators
+// ---------------------------------------------------------------------------
+
+.balance {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+
+  &--positive {
+    color: $color-positive;
+    background: $color-positive-bg;
+  }
+
+  &--negative {
+    color: $color-negative;
+    background: $color-negative-bg;
+  }
+
+  &--neutral {
+    color: $color-neutral;
+    background: $color-neutral-bg;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Expense list
+// ---------------------------------------------------------------------------
+
+.expense-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.expense-item {
+  position: relative;
+  padding: $space-3;
+  border-radius: $radius-md;
+  background: $color-bg;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: color.adjust($color-bg, $lightness: -2%);
+  }
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: $space-2;
+    padding-right: $space-8;
+    margin-bottom: $space-1;
+  }
+
+  &__desc {
+    font-weight: $font-weight-medium;
+    flex: 1;
+  }
+
+  &__amount {
+    font-weight: $font-weight-bold;
+    font-size: $font-size-md;
+    color: $color-text;
+    flex-shrink: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+
+  &__split {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+
+  &__remove {
+    position: absolute;
+    top: $space-3;
+    right: $space-3;
+    opacity: 0;
+    transition: opacity $transition-fast;
+  }
+
+  &:hover &__remove {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .expense-item__remove {
+    opacity: 1 !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Settle tab
+// ---------------------------------------------------------------------------
+
+.balance-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.balance-item {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3;
+  border-radius: $radius-md;
+  background: $color-bg;
+
+  &__name {
+    flex: 1;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.settlement-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.settlement-item {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: $color-bg;
+  border-left: 3px solid $color-primary-light;
+
+  &__avatars {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+
+  &__arrow {
+    font-size: $font-size-md;
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+  }
+
+  &__detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    font-size: $font-size-sm;
+  }
+
+  &__amount {
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+    color: $color-negative;
+  }
+}
+
+.settle-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-8;
+  text-align: center;
+
+  &__icon {
+    font-size: $font-size-2xl * 1.5;
+  }
+
+  p {
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Empty states
+// ---------------------------------------------------------------------------
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-10 $space-6;
+  text-align: center;
+  color: $color-text-muted;
+
+  &__icon {
+    font-size: 3rem;
+    display: block;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    max-width: 240px;
+    line-height: $line-height-normal;
+  }
+}

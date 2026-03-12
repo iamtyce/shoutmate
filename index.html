@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tabbo – split costs with friends on your weekend away" />
+    <title>Tabbo</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏕️</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles/main.scss" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <div class="header__inner">
+          <!-- Populated by JS: home brand or trip header -->
+        </div>
+      </header>
+
+      <!-- ── HOME VIEW ─────────────────────────────────────────── -->
+      <div id="view-home" hidden>
+        <main class="main">
+          <div class="panel panel--active">
+            <div class="panel__content">
+              <div class="card">
+                <h2 class="card__title">New trip</h2>
+                <form id="form-create-trip" class="form" novalidate>
+                  <div class="form__row">
+                    <div class="form__field">
+                      <label class="form__label" for="input-trip-name">Trip name</label>
+                      <input
+                        class="form__input"
+                        type="text"
+                        id="input-trip-name"
+                        name="tripName"
+                        placeholder="e.g. Ski Weekend, Lake House..."
+                        autocomplete="off"
+                        maxlength="60"
+                        required
+                      />
+                    </div>
+                    <button class="btn btn--primary" type="submit">Create</button>
+                  </div>
+                  <p class="form__error" id="error-trip-name" role="alert" aria-live="polite"></p>
+                </form>
+              </div>
+              <div id="home-content"></div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- ── TRIP DETAIL VIEW ──────────────────────────────────── -->
+      <div id="view-trip" hidden>
+        <nav class="tabs" role="tablist">
+          <button class="tabs__btn tabs__btn--active" data-tab="people" role="tab" aria-selected="true" aria-controls="panel-people">
+            <span class="tabs__icon">👥</span>
+            <span>People</span>
+          </button>
+          <button class="tabs__btn" data-tab="expenses" role="tab" aria-selected="false" aria-controls="panel-expenses">
+            <span class="tabs__icon">💸</span>
+            <span>Expenses</span>
+          </button>
+          <button class="tabs__btn" data-tab="settle" role="tab" aria-selected="false" aria-controls="panel-settle">
+            <span class="tabs__icon">✅</span>
+            <span>Settle Up</span>
+          </button>
+        </nav>
+
+        <main class="main">
+          <!-- People Tab -->
+          <section id="panel-people" class="panel panel--active" role="tabpanel">
+            <div class="panel__content">
+              <div class="card">
+                <h2 class="card__title">Who's coming?</h2>
+                <form id="form-add-person" class="form" novalidate>
+                  <div class="form__row">
+                    <div class="form__field">
+                      <label class="form__label" for="input-person-name">Name</label>
+                      <input
+                        class="form__input"
+                        type="text"
+                        id="input-person-name"
+                        name="name"
+                        placeholder="e.g. Alex"
+                        autocomplete="off"
+                        maxlength="40"
+                        required
+                      />
+                    </div>
+                    <button class="btn btn--primary btn--icon" type="submit" aria-label="Add person">
+                      <span>Add</span>
+                    </button>
+                  </div>
+                  <p class="form__error" id="error-person-name" role="alert" aria-live="polite"></p>
+                </form>
+              </div>
+              <div id="people-list" class="people-list"></div>
+            </div>
+          </section>
+
+          <!-- Expenses Tab -->
+          <section id="panel-expenses" class="panel" role="tabpanel" hidden>
+            <div class="panel__content">
+              <div class="card" id="expense-form-card">
+                <h2 class="card__title">Add an expense</h2>
+                <div id="expenses-no-people" class="empty-state" hidden>
+                  <p>Add some people first before logging expenses.</p>
+                </div>
+                <form id="form-add-expense" class="form" novalidate>
+                  <div class="form__field">
+                    <label class="form__label" for="input-expense-desc">Description</label>
+                    <input
+                      class="form__input"
+                      type="text"
+                      id="input-expense-desc"
+                      name="description"
+                      placeholder="e.g. Groceries, Airbnb, Petrol..."
+                      autocomplete="off"
+                      maxlength="80"
+                      required
+                    />
+                  </div>
+                  <div class="form__row">
+                    <div class="form__field">
+                      <label class="form__label" for="input-expense-amount">Amount</label>
+                      <input
+                        class="form__input"
+                        type="number"
+                        id="input-expense-amount"
+                        name="amount"
+                        placeholder="0.00"
+                        min="0.01"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                    <div class="form__field">
+                      <label class="form__label" for="input-expense-paid-by">Paid by</label>
+                      <select class="form__select" id="input-expense-paid-by" name="paidById" required>
+                        <option value="">Select person</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form__field">
+                    <label class="form__label">Split among</label>
+                    <div id="split-among-checkboxes" class="checkboxes"></div>
+                  </div>
+                  <p class="form__error" id="error-expense" role="alert" aria-live="polite"></p>
+                  <button class="btn btn--primary btn--full" type="submit">Add Expense</button>
+                </form>
+              </div>
+              <div id="expenses-list" class="expenses-list"></div>
+            </div>
+          </section>
+
+          <!-- Settle Up Tab -->
+          <section id="panel-settle" class="panel" role="tabpanel" hidden>
+            <div class="panel__content">
+              <div id="settle-summary" class="settle-summary"></div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
