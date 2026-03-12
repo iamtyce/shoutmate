@@ -140,6 +140,7 @@ function showHomeView(moveFocus = false): void {
   el('.header').classList.remove('header--trip');
   el('.header').classList.add('header--home');
   renderHomeHeader();
+  el('#share-mount').innerHTML = '';
   renderTripList();
   if (moveFocus) {
     announce(`${S.appName} – home`);
@@ -238,11 +239,13 @@ function renderTripHeader(tripId: string): void {
     </div>`;
 
   el('#btn-brand-home').addEventListener('click', () => {
-    window.location.hash = '/';
+    history.pushState(null, '', '#/');
+    showHomeView(true);
   });
 
   el('#btn-back').addEventListener('click', () => {
-    window.location.hash = '/';
+    history.pushState(null, '', '#/');
+    showHomeView(true);
   });
 
   el('#btn-share').addEventListener('click', async () => {
@@ -456,7 +459,8 @@ async function handleShareImport(payload: string, moveFocus = false): Promise<vo
     maximumFractionDigits: 2,
   }).format(total);
 
-  const container = el<HTMLElement>('#home-content');
+  renderTripList();
+  const container = el<HTMLElement>('#share-mount');
   container.innerHTML = `
     <div class="card import-card">
       <div class="import-card__icon" aria-hidden="true">🔗</div>
