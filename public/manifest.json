@@ -1,0 +1,24 @@
+{
+  "name": "ShoutMate",
+  "short_name": "ShoutMate",
+  "description": "Free trip expense splitter. Track shared costs and settle up in seconds. No account needed.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#eaf4fc",
+  "theme_color": "#1e72c8",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

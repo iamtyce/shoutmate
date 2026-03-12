@@ -403,6 +403,17 @@
     margin: 0;
   }
 
+  &__privacy {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    padding: 0;
+
+    &:hover {
+      color: $color-primary;
+      text-decoration: underline;
+    }
+  }
+
   &__right {
     display: flex;
     align-items: center;
@@ -415,6 +426,7 @@
     align-items: center;
     gap: $space-2;
     flex-shrink: 0;
+    margin: 0 auto auto $space-4;
   }
 
   &__label {
@@ -1101,6 +1113,68 @@
     flex-direction: column;
     gap: $space-2;
   }
+
+  &__via {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Privacy dialog
+// ---------------------------------------------------------------------------
+
+dialog {
+  border: none;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  padding: 0;
+  max-width: min(540px, calc(100vw - #{$space-8}));
+  background: $color-surface;
+  color: $color-text;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+}
+
+.privacy-dialog {
+  padding: $space-8;
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin-bottom: $space-6;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    max-height: 55vh;
+    overflow-y: auto;
+    margin-bottom: $space-6;
+
+    h3 {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-semibold;
+      margin-top: $space-2;
+    }
+
+    p {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      line-height: $line-height-normal;
+    }
+
+    a {
+      color: $color-primary;
+      text-decoration: underline;
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -1322,6 +1396,12 @@
 
   // Import card
   .import-card__name {
+    color: var(--color-text);
+  }
+
+  // Privacy dialog
+  dialog {
+    background: var(--color-surface);
     color: var(--color-text);
   }
 }

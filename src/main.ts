@@ -475,6 +475,7 @@ async function handleShareImport(payload: string, moveFocus = false): Promise<vo
         <button class="btn btn--primary btn--full" id="btn-import-trip">${S.saveToMyTrips}</button>
         <button class="btn btn--ghost btn--full" id="btn-dismiss-import">${S.goToMyTrips}</button>
       </div>
+      <p class="import-card__via">${S.sharedVia}</p>
     </div>`;
 
   el('#btn-import-trip').addEventListener('click', () => {
@@ -866,10 +867,22 @@ const CURRENCY_OPTIONS = `
   <option value="USD">🇺🇸 USD</option>
   <option value="EUR">🇪🇺 EUR</option>
   <option value="GBP">🇬🇧 GBP</option>
-  <option value="NZD">🇳🇿 NZD</option>
-  <option value="CAD">🇨🇦 CAD</option>
   <option value="JPY">🇯🇵 JPY</option>
-  <option value="SGD">🇸🇬 SGD</option>`;
+  <option value="CAD">🇨🇦 CAD</option>
+  <option value="CHF">🇨🇭 CHF</option>
+  <option value="CNY">🇨🇳 CNY</option>
+  <option value="HKD">🇭🇰 HKD</option>
+  <option value="NZD">🇳🇿 NZD</option>
+  <option value="SGD">🇸🇬 SGD</option>
+  <option value="SEK">🇸🇪 SEK</option>
+  <option value="NOK">🇳🇴 NOK</option>
+  <option value="DKK">🇩🇰 DKK</option>
+  <option value="INR">🇮🇳 INR</option>
+  <option value="KRW">🇰🇷 KRW</option>
+  <option value="BRL">🇧🇷 BRL</option>
+  <option value="MXN">🇲🇽 MXN</option>
+  <option value="THB">🇹🇭 THB</option>
+  <option value="MYR">🇲🇾 MYR</option>`;
 
 function buildFooter(currencySelectId: string, currencyAriaLabel: string): string {
   return `
@@ -877,6 +890,7 @@ function buildFooter(currencySelectId: string, currencyAriaLabel: string): strin
       <div class="trip-footer__inner">
         <p class="trip-footer__copy">${S.appTagline}</p>
         <div class="trip-footer__right">
+          <button class="trip-footer__privacy btn-privacy">${S.privacyBtn}</button>
           <div class="trip-footer__currency">
             <label class="trip-footer__label" for="${currencySelectId}">${S.currencyLabel}</label>
             <select class="trip-footer__select" id="${currencySelectId}" aria-label="${currencyAriaLabel}">
@@ -918,6 +932,21 @@ function init(): void {
   document.querySelectorAll('.theme-toggle').forEach((btn) => {
     btn.addEventListener('click', toggleTheme);
   });
+
+  // Privacy dialog
+  const privacyDialog = document.getElementById('dialog-privacy') as HTMLDialogElement;
+  document.querySelectorAll('.btn-privacy').forEach((btn) => {
+    btn.addEventListener('click', () => privacyDialog.showModal());
+  });
+  document.getElementById('btn-close-privacy')?.addEventListener('click', () => privacyDialog.close());
+  privacyDialog.addEventListener('click', (e) => {
+    if (e.target === privacyDialog) privacyDialog.close();
+  });
+
+  // Service worker
+  if ('serviceWorker' in navigator && import.meta.env.PROD) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
 
   // Home footer currency — saves default preference
   el('#home-select-currency').addEventListener('change', (e) => {

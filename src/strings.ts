@@ -1,7 +1,7 @@
 export const S = {
   // App identity
   appName: 'ShoutMate',
-  appTagline: '© ShoutMate 2026',
+  appTagline: 'Built in Australia 🇦🇺',
 
   // Hero
   heroHeading: 'Trips sorted.<br/>Mates still mates.',
@@ -83,6 +83,7 @@ export const S = {
   pays: 'pays',
 
   // Share import
+  sharedVia: 'Shared via ShoutMate ⛺',
   tripInvite: 'Trip invite',
   saveToMyTrips: 'Save to my trips',
   goToMyTrips: 'Go to my trips',
@@ -99,6 +100,7 @@ export const S = {
 
   // Footer
   currencyLabel: 'Currency',
+  privacyBtn: 'Privacy Policy',
 
   // Theme
   lightMode: '☀️',

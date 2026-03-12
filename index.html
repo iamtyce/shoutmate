@@ -6,6 +6,12 @@
     <meta name="description" content="ShoutMate is a free, no-login expense splitter for group trips. Track shared costs, split bills fairly and settle up in seconds. The simple, free alternative to Splitwise and Tricount." />
     <title>ShoutMate – Free Trip Expense Splitter | Splitwise Alternative</title>
     <link rel="canonical" href="https://www.shoutmate.app/" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1e72c8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="ShoutMate" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZ2J9LQ6K8"></script>
     <script>
@@ -210,6 +216,27 @@
         <div id="footer-mount-trip"></div>
       </div>
     </div>
+
+    <!-- Privacy dialog -->
+    <dialog id="dialog-privacy" aria-labelledby="dialog-privacy-title">
+      <div class="privacy-dialog">
+        <h2 class="privacy-dialog__title" id="dialog-privacy-title">Privacy Policy</h2>
+        <div class="privacy-dialog__body">
+          <p><strong>Your data stays on your device.</strong> ShoutMate stores all trip and expense data in your browser's local storage. We never send your trip data to any external server.</p>
+          <h3>What we collect</h3>
+          <p>We use Google Analytics to understand how people use ShoutMate (page views, feature usage). This data is anonymous and aggregated. We do not collect personally identifiable information.</p>
+          <h3>Local storage</h3>
+          <p>Trip data — participants, expenses, and balances — is stored only in your browser. Clearing your browser data will permanently delete all trips. We recommend using the share link to back up important trips.</p>
+          <h3>Share links</h3>
+          <p>When you share a trip, a short code is generated via our link-shortening service. The trip data is encoded in the URL itself — no personal information is stored on our servers beyond the short-code mapping.</p>
+          <h3>Third-party services</h3>
+          <p>We use Google Analytics (anonymised), Google Fonts (loaded from Google's CDN), and Cloudflare Pages for hosting. These services have their own privacy policies.</p>
+          <h3>Contact</h3>
+          <p>Questions or concerns? Reach us at <a href="mailto:hello@shoutmate.app">hello@shoutmate.app</a></p>
+        </div>
+        <button class="btn btn--primary privacy-dialog__close" id="btn-close-privacy">Close</button>
+      </div>
+    </dialog>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
