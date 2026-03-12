@@ -44,6 +44,10 @@
     margin-bottom: $space-4;
     padding-bottom: $space-3;
     border-bottom: 1px solid $color-border;
+
+    .btn--share {
+      margin-left: auto;
+    }
   }
 
   &__logo {
@@ -160,41 +164,7 @@
   }
 }
 
-// ── Back / Share buttons ──────────────────────────────────────────
-
-.btn--back {
-  background: $color-surface;
-  color: $color-text-secondary;
-  border: 1.5px solid $color-border;
-  border-radius: $radius-full;
-  height: 32px;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  padding: 0 $space-4;
-  box-shadow: $shadow-sm;
-
-  &:hover {
-    background: $color-neutral-bg;
-    color: $color-text;
-    border-color: $color-primary-light;
-  }
-}
-
-.btn--share {
-  background: $color-primary;
-  color: #fff;
-  border: none;
-  border-radius: $radius-full;
-  height: 32px;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  padding: 0 $space-4;
-  box-shadow: 0 2px 8px rgba(30, 114, 200, 0.3);
-
-  &:hover {
-    background: $color-primary-dark;
-  }
-}
+// ── Back / Share links — placed before .btn but use double-class for specificity ──
 
 // ---------------------------------------------------------------------------
 // Hero section (home screen)
@@ -276,7 +246,7 @@
     color: $color-text-secondary;
     line-height: 1.65;
     max-width: 340px;
-    margin: 0 auto;
+    margin: 0 auto $space-2;
 
     @media (min-width: 600px) {
       max-width: 500px;
@@ -295,34 +265,39 @@
 
 .tabs {
   display: flex;
-  background: $color-surface;
-  border-bottom: none;
-  border-top: 1px solid $color-border;
+  justify-content: center;
+  padding: $space-3 $space-4 0;
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: $space-2 $space-3;
-  gap: $space-2;
-  box-shadow: 0 2px 12px rgba(12, 48, 80, 0.06);
+  background: linear-gradient(to bottom, $color-bg 65%, transparent 100%);
+
+  &__inner {
+    display: inline-flex;
+    gap: $space-1;
+    background: $color-surface;
+    border-radius: $radius-full;
+    padding: $space-1;
+    box-shadow: $shadow-md;
+  }
 
   &__btn {
-    flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: $space-1;
-    padding: $space-2 $space-3;
-    font-size: $font-size-xs;
+    gap: $space-2;
+    padding: $space-2 $space-5;
+    font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     color: $color-text-muted;
-    border-radius: $radius-lg;
-    border-bottom: none;
+    border-radius: $radius-full;
+    white-space: nowrap;
     transition: background $transition-fast, color $transition-fast;
 
     &:hover:not(&--active) {
       color: $color-text-secondary;
-      background: $color-neutral-bg;
+      background: rgba(0, 0, 0, 0.04);
     }
 
     &--active {
@@ -333,7 +308,7 @@
   }
 
   &__icon {
-    font-size: $font-size-md;
+    font-size: $font-size-base;
   }
 }
 
@@ -344,6 +319,58 @@
 .main {
   flex: 1;
   padding: $space-6 $space-4 $space-4;
+}
+
+.trip-footer {
+  margin-top: $space-6;
+  padding: $space-3 $space-4;
+  border-top: 1px solid $color-border;
+
+  &__inner {
+    max-width: $max-width;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-4;
+  }
+
+  &__copy {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    margin: 0;
+  }
+
+  &__currency {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    white-space: nowrap;
+  }
+
+  &__select {
+    appearance: none;
+    background: transparent;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    color: $color-text-secondary;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: $font-size-xs;
+    padding: 2px $space-2;
+    line-height: 1.4;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
 }
 
 #home-content:not(:empty) {
@@ -362,7 +389,7 @@
   &__content {
     display: flex;
     flex-direction: column;
-    gap: $space-4;
+    gap: $space-6;
   }
 }
 
@@ -573,6 +600,48 @@
 
   &--full {
     width: 100%;
+  }
+}
+
+// ── Back / Share overrides (after .btn to win the cascade) ───────
+
+.btn.btn--back {
+  background: none;
+  border: none;
+  border-radius: 0;
+  height: auto;
+  padding: 0;
+  box-shadow: none;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $color-text-muted;
+  flex-shrink: 0;
+
+  &:hover {
+    color: $color-text;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.btn.btn--share {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #c084fc 100%);
+  background-size: 200% 100%;
+  border: none;
+  border-radius: $radius-full;
+  height: auto;
+  padding: 3px $space-3;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+  font-size: 11px;
+  font-weight: $font-weight-semibold;
+  color: #fff;
+  letter-spacing: 0.01em;
+  transition: background-position $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    background-position: 100% 0;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+    color: #fff;
   }
 }
 
@@ -809,6 +878,12 @@
     font-weight: $font-weight-bold;
     color: $color-negative;
   }
+}
+
+#settle-summary {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
 }
 
 .settle-done {

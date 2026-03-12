@@ -20,7 +20,7 @@
       </header>
 
       <!-- ── HOME VIEW ─────────────────────────────────────────── -->
-      <div id="view-home" hidden>
+      <div id="view-home" hidden style="display: flex; flex-direction: column; flex: 1;">
         <main class="main">
           <div class="panel panel--active">
             <div class="panel__content">
@@ -49,23 +49,30 @@
             </div>
           </div>
         </main>
+        <footer class="trip-footer">
+          <div class="trip-footer__inner">
+            <p class="trip-footer__copy">ShoutMate · Split costs, not friendships.</p>
+          </div>
+        </footer>
       </div>
 
       <!-- ── TRIP DETAIL VIEW ──────────────────────────────────── -->
       <div id="view-trip" hidden>
         <nav class="tabs" role="tablist">
-          <button class="tabs__btn tabs__btn--active" data-tab="people" role="tab" aria-selected="true" aria-controls="panel-people">
-            <span class="tabs__icon">👥</span>
-            <span>People</span>
-          </button>
-          <button class="tabs__btn" data-tab="expenses" role="tab" aria-selected="false" aria-controls="panel-expenses">
-            <span class="tabs__icon">💸</span>
-            <span>Expenses</span>
-          </button>
-          <button class="tabs__btn" data-tab="settle" role="tab" aria-selected="false" aria-controls="panel-settle">
-            <span class="tabs__icon">✅</span>
-            <span>Settle Up</span>
-          </button>
+          <div class="tabs__inner">
+            <button class="tabs__btn tabs__btn--active" data-tab="people" role="tab" aria-selected="true" aria-controls="panel-people">
+              <span class="tabs__icon">👥</span>
+              <span>People</span>
+            </button>
+            <button class="tabs__btn" data-tab="expenses" role="tab" aria-selected="false" aria-controls="panel-expenses">
+              <span class="tabs__icon">💸</span>
+              <span>Expenses</span>
+            </button>
+            <button class="tabs__btn" data-tab="settle" role="tab" aria-selected="false" aria-controls="panel-settle">
+              <span class="tabs__icon">🤝</span>
+              <span>Settle Up</span>
+            </button>
+          </div>
         </nav>
 
         <main class="main">
@@ -162,6 +169,25 @@
             </div>
           </section>
         </main>
+
+        <footer class="trip-footer">
+          <div class="trip-footer__inner">
+            <p class="trip-footer__copy">ShoutMate · Split costs, not friendships.</p>
+            <div class="trip-footer__currency">
+              <label class="trip-footer__label" for="select-currency">Currency</label>
+              <select class="trip-footer__select" id="select-currency" aria-label="Select currency">
+                <option value="AUD">🇦🇺 AUD</option>
+                <option value="USD">🇺🇸 USD</option>
+                <option value="EUR">🇪🇺 EUR</option>
+                <option value="GBP">🇬🇧 GBP</option>
+                <option value="NZD">🇳🇿 NZD</option>
+                <option value="CAD">🇨🇦 CAD</option>
+                <option value="JPY">🇯🇵 JPY</option>
+                <option value="SGD">🇸🇬 SGD</option>
+              </select>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
 

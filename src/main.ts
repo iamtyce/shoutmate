@@ -21,17 +21,6 @@ import { encodeTripToShareUrl, decodeTripFromPayload } from './share';
 // Currency config
 // ---------------------------------------------------------------------------
 
-const CURRENCIES: { code: string; label: string }[] = [
-  { code: 'AUD', label: 'AUD – Australian Dollar' },
-  { code: 'USD', label: 'USD – US Dollar' },
-  { code: 'GBP', label: 'GBP – British Pound' },
-  { code: 'EUR', label: 'EUR – Euro' },
-  { code: 'NZD', label: 'NZD – New Zealand Dollar' },
-  { code: 'CAD', label: 'CAD – Canadian Dollar' },
-  { code: 'SGD', label: 'SGD – Singapore Dollar' },
-  { code: 'JPY', label: 'JPY – Japanese Yen' },
-];
-
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -117,14 +106,23 @@ function showTripView(tripId: string): void {
     initTabs();
     initPeopleForm();
     initExpenseForm();
+
+    el('#select-currency').addEventListener('change', (e) => {
+      setCurrency((e.target as HTMLSelectElement).value);
+      renderPeople();
+      const activeTab = document.querySelector<HTMLButtonElement>('.tabs__btn--active')?.dataset.tab;
+      if (activeTab === 'expenses') renderExpensesList();
+      if (activeTab === 'settle') renderSettle();
+    });
+
     tripViewBooted = true;
   }
 
   // Sync currency selector to this trip's currency
-  const currencySelect = el<HTMLSelectElement>('#select-currency');
-  currencySelect.value = getState().currency;
+  el<HTMLSelectElement>('#select-currency').value = getState().currency;
 
   renderPeople();
+  renderExpenseForm();
 }
 
 // ---------------------------------------------------------------------------
@@ -147,8 +145,9 @@ function renderHomeHeader(): void {
         <span class="hero__bubble hero__bubble--5">🧳</span>
       </div>
       <div class="hero__accent"></div>
-      <h1 class="hero__heading">Your trips,<br>perfectly split.</h1>
-      <p class="hero__sub">Plan adventures with friends without the awkward money talk.<br />Add expenses as you go, settle up in seconds.</p>
+      <h1 class="hero__heading">Trips sorted.<br/>Mates still mates.</h1>
+      <p class="hero__sub">Track shared expenses as you go and settle up in seconds.</p>
+      <p class="hero__sub">No accounts. No awkward money chats. Just a fair shout.</p>
     </section>`;
 }
 
@@ -164,19 +163,11 @@ function renderTripHeader(tripId: string): void {
     <div class="header__brand-bar">
       <span class="header__logo">⛺</span>
       <span class="header__brand-name">ShoutMate</span>
-    </div>
-    <div class="header__top">
-      <button class="btn btn--back" id="btn-back">← Trips</button>
-      <button class="btn btn--share" id="btn-share">Share link</button>
+      <button class="btn btn--share" id="btn-share">🔗 Share</button>
     </div>
     <div class="header__trip-row">
       <h2 class="header__trip-name" id="trip-name-display" title="Click to rename">${escapeHtml(trip.name)}</h2>
-      <div class="header__currency">
-        <label class="header__currency-label" for="select-currency">Currency</label>
-        <select class="header__currency-select" id="select-currency" aria-label="Select currency">
-          ${CURRENCIES.map((c) => `<option value="${c.code}" ${c.code === getState().currency ? 'selected' : ''}>${c.label}</option>`).join('')}
-        </select>
-      </div>
+      <button class="btn btn--back" id="btn-back">← Back to trips</button>
     </div>`;
 
   el('#btn-back').addEventListener('click', () => navigate(''));
@@ -189,14 +180,6 @@ function renderTripHeader(tripId: string): void {
     } catch {
       prompt('Copy this share link:', shareUrl);
     }
-  });
-
-  el('#select-currency').addEventListener('change', (e) => {
-    setCurrency((e.target as HTMLSelectElement).value);
-    renderPeople();
-    const activeTab = document.querySelector<HTMLButtonElement>('.tabs__btn--active')?.dataset.tab;
-    if (activeTab === 'expenses') renderExpensesList();
-    if (activeTab === 'settle') renderSettle();
   });
 
   el<HTMLElement>('#trip-name-display').addEventListener('click', () => {
@@ -528,6 +511,7 @@ function initPeopleForm(): void {
     input.value = '';
     input.focus();
     renderPeople();
+    renderExpenseForm();
   });
 }
 
