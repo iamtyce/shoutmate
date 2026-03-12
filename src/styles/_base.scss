@@ -58,3 +58,36 @@ strong {
   outline: none;
   box-shadow: $shadow-focus;
 }
+
+// Screen-reader only utility
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Skip navigation link
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: $space-4;
+  z-index: 9999;
+  background: $color-primary;
+  color: #fff;
+  padding: $space-3 $space-5;
+  border-radius: $radius-full;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  text-decoration: none;
+
+  &:focus {
+    top: $space-4;
+    box-shadow: $shadow-focus;
+  }
+}

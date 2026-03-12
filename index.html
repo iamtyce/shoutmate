@@ -3,17 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ShoutMate – split costs with friends on your weekend away" />
-    <title>ShoutMate</title>
+    <meta name="description" content="ShoutMate is a free, no-login expense splitter for group trips. Track shared costs, split bills fairly and settle up in seconds. The simple, free alternative to Splitwise and Tricount." />
+    <title>ShoutMate – Free Trip Expense Splitter | Splitwise Alternative</title>
+    <link rel="canonical" href="https://www.shoutmate.app/" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.shoutmate.app/" />
-    <meta property="og:title" content="ShoutMate" />
-    <meta property="og:description" content="Split costs, not friendships. Track expenses on your weekend away and settle up in seconds." />
+    <meta property="og:title" content="ShoutMate – Free Trip Expense Splitter" />
+    <meta property="og:description" content="Split costs, not friendships. Track shared expenses on your group trip and settle up in seconds. Free, no account needed." />
     <meta property="og:image" content="https://www.shoutmate.app/preview.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://www.shoutmate.app/preview.png" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ShoutMate",
+      "description": "Free group expense splitter for trips. Track shared costs and settle up instantly. No account required.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "url": "https://www.shoutmate.app/",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏕️</text></svg>" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,6 +38,8 @@
     <link rel="stylesheet" href="/src/styles/main.scss" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div role="status" id="live-region" class="sr-only" aria-atomic="true"></div>
     <div id="app">
       <header class="header">
         <div class="header__inner">
@@ -30,7 +49,7 @@
 
       <!-- ── HOME VIEW ─────────────────────────────────────────── -->
       <div id="view-home" hidden>
-        <main class="main">
+        <main class="main" id="main-content" tabindex="-1">
           <div class="panel panel--active">
             <div class="panel__content">
               <div class="card">
@@ -64,18 +83,18 @@
 
       <!-- ── TRIP DETAIL VIEW ──────────────────────────────────── -->
       <div id="view-trip" hidden>
-        <nav class="tabs" role="tablist">
+        <nav class="tabs" role="tablist" aria-label="Trip sections">
           <div class="tabs__inner">
-            <button class="tabs__btn tabs__btn--active" data-tab="people" role="tab" aria-selected="true" aria-controls="panel-people">
-              <span class="tabs__icon">👥</span>
+            <button id="tab-people" class="tabs__btn tabs__btn--active" data-tab="people" role="tab" aria-selected="true" aria-controls="panel-people" tabindex="0">
+              <span class="tabs__icon" aria-hidden="true">👥</span>
               <span data-i18n="tabPeople">People</span>
             </button>
-            <button class="tabs__btn" data-tab="expenses" role="tab" aria-selected="false" aria-controls="panel-expenses">
-              <span class="tabs__icon">💸</span>
+            <button id="tab-expenses" class="tabs__btn" data-tab="expenses" role="tab" aria-selected="false" aria-controls="panel-expenses" tabindex="-1">
+              <span class="tabs__icon" aria-hidden="true">💸</span>
               <span data-i18n="tabExpenses">Expenses</span>
             </button>
-            <button class="tabs__btn" data-tab="settle" role="tab" aria-selected="false" aria-controls="panel-settle">
-              <span class="tabs__icon">🤝</span>
+            <button id="tab-settle" class="tabs__btn" data-tab="settle" role="tab" aria-selected="false" aria-controls="panel-settle" tabindex="-1">
+              <span class="tabs__icon" aria-hidden="true">🤝</span>
               <span data-i18n="tabSettleUp">Settle Up</span>
             </button>
           </div>
@@ -83,7 +102,7 @@
 
         <main class="main">
           <!-- People Tab -->
-          <section id="panel-people" class="panel panel--active" role="tabpanel">
+          <section id="panel-people" class="panel panel--active" role="tabpanel" aria-labelledby="tab-people">
             <div class="panel__content">
               <div class="card">
                 <h2 class="card__title" data-i18n="whoComing">Who's coming?</h2>
@@ -115,7 +134,7 @@
           </section>
 
           <!-- Expenses Tab -->
-          <section id="panel-expenses" class="panel" role="tabpanel" hidden>
+          <section id="panel-expenses" class="panel" role="tabpanel" aria-labelledby="tab-expenses" hidden>
             <div class="panel__content">
               <div class="card" id="expense-form-card">
                 <h2 class="card__title" data-i18n="addExpenseTitle">Add an expense</h2>
@@ -144,6 +163,7 @@
                         class="form__input"
                         type="number"
                         id="input-expense-amount"
+                        inputmode="decimal"
                         name="amount"
                         placeholder="0.00"
                         min="0.01"
@@ -171,7 +191,7 @@
           </section>
 
           <!-- Settle Up Tab -->
-          <section id="panel-settle" class="panel" role="tabpanel" hidden>
+          <section id="panel-settle" class="panel" role="tabpanel" aria-labelledby="tab-settle" hidden>
             <div class="panel__content">
               <div id="settle-summary" class="settle-summary"></div>
             </div>

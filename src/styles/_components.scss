@@ -435,9 +435,10 @@
     padding: 2px $space-2;
     line-height: 1.4;
 
-    &:focus {
+    &:focus-visible {
       outline: none;
       border-color: $color-primary;
+      box-shadow: $shadow-focus;
     }
   }
 }

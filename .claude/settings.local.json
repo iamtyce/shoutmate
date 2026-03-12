@@ -12,7 +12,14 @@
       "WebFetch(domain:dribbble.com)",
       "Bash(gh repo:*)",
       "Bash(git remote:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npx wrangler:*)",
+      "Bash(curl -s -X POST https://shoutmate-share.tyce.workers.dev -H 'Content-Type: application/json' -d '{\"\"v\"\":2,\"\"n\"\":\"\"Test\"\",\"\"c\"\":\"\"AUD\"\",\"\"p\"\":[\"\"Alice\"\",\"\"Bob\"\"],\"\"e\"\":[]}')",
+      "Bash(curl -s https://shoutmate-share.tyce.workers.dev/j7buckkv)",
+      "Bash(npm test:*)",
+      "Bash(node -e \"const {createCanvas} = require\\(''canvas''\\); console.log\\(''canvas ok''\\)\")",
+      "Bash(node -e \"require\\(''sharp''\\); console.log\\(''sharp ok''\\)\")",
+      "Bash(gh run:*)"
     ]
   }
 }

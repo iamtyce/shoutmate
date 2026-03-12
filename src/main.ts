@@ -109,11 +109,11 @@ function updateThemeToggles(): void {
 
 let tripViewBooted = false;
 
-function handleRoute(): void {
+function handleRoute(moveFocus = false): void {
   const route = parseRoute(window.location.hash);
 
   if (route.view === 'share') {
-    void handleShareImport(route.payload);
+    void handleShareImport(route.payload, moveFocus);
     return;
   }
 
@@ -123,36 +123,49 @@ function handleRoute(): void {
       navigate('');
       return;
     }
-    showTripView(trip.id);
+    showTripView(trip.id, moveFocus);
     return;
   }
 
-  showHomeView();
+  showHomeView(moveFocus);
 }
 
 // ---------------------------------------------------------------------------
 // Screen switching
 // ---------------------------------------------------------------------------
 
-function showHomeView(): void {
+function showHomeView(moveFocus = false): void {
   el('#view-home').hidden = false;
   el('#view-trip').hidden = true;
   el('.header').classList.remove('header--trip');
   el('.header').classList.add('header--home');
   renderHomeHeader();
   renderTripList();
+  if (moveFocus) {
+    announce(`${S.appName} – home`);
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('.hero__heading')?.focus();
+    });
+  }
 
   const defaultCurrency = localStorage.getItem('shoutmate_default_currency') ?? 'AUD';
   el<HTMLSelectElement>('#home-select-currency').value = defaultCurrency;
 }
 
-function showTripView(tripId: string): void {
+function showTripView(tripId: string, moveFocus = false): void {
   setActiveTrip(tripId);
   el('#view-home').hidden = true;
   el('#view-trip').hidden = false;
   el('.header').classList.remove('header--home');
   el('.header').classList.add('header--trip');
   renderTripHeader(tripId);
+  if (moveFocus) {
+    const trip = getTrip(tripId);
+    announce(`Trip: ${trip?.name ?? ''}`);
+    requestAnimationFrame(() => {
+      document.getElementById('trip-name-display')?.focus();
+    });
+  }
 
   if (!tripViewBooted) {
     initTabs();
@@ -197,7 +210,7 @@ function renderHomeHeader(): void {
         <span class="hero__bubble hero__bubble--5">🧳</span>
       </div>
       <div class="hero__accent"></div>
-      <h1 class="hero__heading">${S.heroHeading}</h1>
+      <h1 class="hero__heading" tabindex="-1">${S.heroHeading}</h1>
       <p class="hero__sub">${S.heroSub1}</p>
       <p class="hero__sub">${S.heroSub2}</p>
     </section>`;
@@ -220,7 +233,7 @@ function renderTripHeader(tripId: string): void {
       <button class="btn btn--share" id="btn-share">${S.shareBtn}</button>
     </div>
     <div class="header__trip-row">
-      <h2 class="header__trip-name" id="trip-name-display" title="${S.clickToRename}">${escapeHtml(trip.name)}</h2>
+      <h1 class="header__trip-name" id="trip-name-display" title="${S.clickToRename}" tabindex="-1">${escapeHtml(trip.name)}</h1>
       <button class="btn btn--back" id="btn-back">${S.backToTrips}</button>
     </div>`;
 
@@ -274,7 +287,17 @@ function startTripRename(tripId: string): void {
 // Toast notification
 // ---------------------------------------------------------------------------
 
+function announce(message: string): void {
+  const region = document.getElementById('live-region');
+  if (!region) return;
+  // Clear first so re-announcing the same string still fires
+  region.textContent = '';
+  requestAnimationFrame(() => { region.textContent = message; });
+}
+
 function showToast(message: string): void {
+  announce(message);
+
   const existing = document.querySelector('.toast');
   if (existing) existing.remove();
 
@@ -302,7 +325,7 @@ function renderTripList(): void {
   const tripListHtml =
     trips.length === 0
       ? `<div class="empty-state">
-          <span class="empty-state__icon">🏕️</span>
+          <span class="empty-state__icon" aria-hidden="true">🏕️</span>
           <p>${S.noTripsYet}</p>
         </div>`
       : `<div class="card">
@@ -404,7 +427,7 @@ function initCreateTripForm(): void {
 // Share import view
 // ---------------------------------------------------------------------------
 
-async function handleShareImport(payload: string): Promise<void> {
+async function handleShareImport(payload: string, moveFocus = false): Promise<void> {
   const decoded = await decodeTripFromPayload(payload);
 
   if (!decoded) {
@@ -418,6 +441,12 @@ async function handleShareImport(payload: string): Promise<void> {
   el('.header').classList.remove('header--trip');
   el('.header').classList.add('header--home');
   renderHomeHeader();
+  if (moveFocus) {
+    announce(`Trip invite: ${decoded.name}`);
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('.hero__heading')?.focus();
+    });
+  }
 
   const total = totalExpenses(decoded.state.expenses);
   const totalFormatted = new Intl.NumberFormat(undefined, {
@@ -430,7 +459,7 @@ async function handleShareImport(payload: string): Promise<void> {
   const container = el<HTMLElement>('#home-content');
   container.innerHTML = `
     <div class="card import-card">
-      <div class="import-card__icon">🔗</div>
+      <div class="import-card__icon" aria-hidden="true">🔗</div>
       <h2 class="card__title">${S.tripInvite}</h2>
       <p class="import-card__name">${escapeHtml(decoded.name)}</p>
       <ul class="import-card__stats">
@@ -457,32 +486,54 @@ async function handleShareImport(payload: string): Promise<void> {
 // ---------------------------------------------------------------------------
 
 function initTabs(): void {
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.tabs__btn');
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tabs__btn'));
   const panels = document.querySelectorAll<HTMLElement>('.panel');
 
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.tab;
-      buttons.forEach((b) => {
-        b.classList.remove('tabs__btn--active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      panels.forEach((p) => {
-        p.classList.remove('panel--active');
-        p.hidden = true;
-      });
+  function activateTab(btn: HTMLButtonElement): void {
+    const target = btn.dataset.tab;
+    buttons.forEach((b) => {
+      b.classList.remove('tabs__btn--active');
+      b.setAttribute('aria-selected', 'false');
+      b.setAttribute('tabindex', '-1');
+    });
+    panels.forEach((p) => {
+      p.classList.remove('panel--active');
+      p.hidden = true;
+    });
+    btn.classList.add('tabs__btn--active');
+    btn.setAttribute('aria-selected', 'true');
+    btn.setAttribute('tabindex', '0');
+    const panel = document.getElementById(`panel-${target}`);
+    if (panel) {
+      panel.classList.add('panel--active');
+      panel.hidden = false;
+    }
+    if (target === 'expenses') renderExpenseForm();
+    if (target === 'settle') renderSettle();
+  }
 
-      btn.classList.add('tabs__btn--active');
-      btn.setAttribute('aria-selected', 'true');
-
-      const panel = document.getElementById(`panel-${target}`);
-      if (panel) {
-        panel.classList.add('panel--active');
-        panel.hidden = false;
+  buttons.forEach((btn, i) => {
+    btn.addEventListener('click', () => activateTab(btn));
+    btn.addEventListener('keydown', (e) => {
+      let targetIndex: number | null = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        targetIndex = (i + 1) % buttons.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        targetIndex = (i - 1 + buttons.length) % buttons.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        targetIndex = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        targetIndex = buttons.length - 1;
       }
-
-      if (target === 'expenses') renderExpenseForm();
-      if (target === 'settle') renderSettle();
+      if (targetIndex !== null) {
+        const target = buttons[targetIndex];
+        activateTab(target);
+        target.focus();
+      }
     });
   });
 }
@@ -498,7 +549,7 @@ function renderPeople(): void {
   if (participants.length === 0) {
     list.innerHTML = `
       <div class="empty-state">
-        <span class="empty-state__icon">👤</span>
+        <span class="empty-state__icon" aria-hidden="true">👤</span>
         <p>${S.noOneYet}</p>
       </div>`;
     return;
@@ -623,7 +674,7 @@ function renderExpensesList(): void {
   if (expenses.length === 0) {
     list.innerHTML = `
       <div class="empty-state">
-        <span class="empty-state__icon">💳</span>
+        <span class="empty-state__icon" aria-hidden="true">💳</span>
         <p>${S.noExpensesYet}</p>
       </div>`;
     return;
@@ -719,7 +770,7 @@ function renderSettle(): void {
   if (participants.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <span class="empty-state__icon">🏕️</span>
+        <span class="empty-state__icon" aria-hidden="true">🏕️</span>
         <p>${S.settleNoPeople}</p>
       </div>`;
     return;
@@ -728,7 +779,7 @@ function renderSettle(): void {
   if (expenses.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <span class="empty-state__icon">💸</span>
+        <span class="empty-state__icon" aria-hidden="true">💸</span>
         <p>${S.settleNoExpenses}</p>
       </div>`;
     return;
@@ -770,7 +821,7 @@ function renderSettle(): void {
 
     ${settlements.length === 0
       ? `<div class="card settle-done">
-          <span class="settle-done__icon">🎉</span>
+          <span class="settle-done__icon" aria-hidden="true">🎉</span>
           <p>${S.settledUp}</p>
         </div>`
       : `<div class="card">
@@ -782,7 +833,7 @@ function renderSettle(): void {
               <li class="settlement-item">
                 <div class="settlement-item__avatars">
                   <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.fromId)}>${nameMap.get(s.fromId)?.charAt(0).toUpperCase() ?? '?'}</div>
-                  <span class="settlement-item__arrow">→</span>
+                  <span class="settlement-item__arrow" aria-hidden="true">→</span>
                   <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.toId)}>${nameMap.get(s.toId)?.charAt(0).toUpperCase() ?? '?'}</div>
                 </div>
                 <div class="settlement-item__detail">
@@ -870,9 +921,9 @@ function init(): void {
   });
 
   initCreateTripForm();
-  window.addEventListener('hashchange', handleRoute);
-  window.addEventListener('popstate', handleRoute);
-  handleRoute();
+  window.addEventListener('hashchange', () => handleRoute(true));
+  window.addEventListener('popstate', () => handleRoute(true));
+  handleRoute(false);
 }
 
 init();
