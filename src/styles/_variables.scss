@@ -110,6 +110,11 @@ $max-width: 600px;
 $header-height: 80px;
 $tab-height: 64px;
 
+// Breakpoints
+$bp-sm: 480px;
+$bp-sm-max: 479px;  // max-width counterpart for $bp-sm
+$bp-md: 600px;
+
 // Transitions
 $transition-fast: 150ms ease;
 $transition-base: 200ms ease;

@@ -934,9 +934,11 @@ function buildFooter(currencySelectId: string, currencyAriaLabel: string): strin
   return `
     <footer class="trip-footer">
       <div class="trip-footer__inner">
-        <p class="trip-footer__copy">${S.appTagline}</p>
-        <div class="trip-footer__right">
+        <div class="trip-footer__meta">
+          <p class="trip-footer__copy">${S.appTagline}</p>
           <button class="trip-footer__privacy btn-privacy">${S.privacyBtn}</button>
+        </div>
+        <div class="trip-footer__right">
           <div class="trip-footer__currency">
             <label class="trip-footer__label" for="${currencySelectId}">${S.currencyLabel}</label>
             <select class="trip-footer__select" id="${currencySelectId}" aria-label="${currencyAriaLabel}">

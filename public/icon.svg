@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#1e72c8"/>
-  <text y="370" x="256" font-size="300" text-anchor="middle" dominant-baseline="auto">⛺</text>
+  <rect width="512" height="512" rx="112" fill="#1e72c8"/>
+  <!-- Tent: left panel -->
+  <path d="M72 408 L256 112 L256 408 Z" fill="white"/>
+  <!-- Tent: right panel (slightly dimmed for depth) -->
+  <path d="M256 112 L440 408 L256 408 Z" fill="rgba(255,255,255,0.82)"/>
+  <!-- Door arch -->
+  <path d="M214 408 Q214 348 256 348 Q298 348 298 408 Z" fill="#1e72c8"/>
 </svg>
