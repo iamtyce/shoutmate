@@ -28,6 +28,7 @@ const sampleTrip: Trip = {
         splitAmongIds: ['p0', 'p1'],
       },
     ],
+    paidSettlements: [],
   },
 };
 

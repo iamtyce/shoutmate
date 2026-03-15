@@ -3,7 +3,7 @@ import type { AppState, Expense, Trip, TripRegistry } from './types';
 const REGISTRY_KEY = 'shoutmate_trips';
 
 function defaultAppState(): AppState {
-  return { participants: [], expenses: [], currency: 'AUD' };
+  return { participants: [], expenses: [], currency: 'AUD', paidSettlements: [] };
 }
 
 function loadRegistry(): TripRegistry {
@@ -117,7 +117,23 @@ export function removeParticipant(id: string): void {
           : { ...e, splitAmongIds: e.splitAmongIds.filter((sid) => sid !== id) }
       )
       .filter((e): e is Expense => e !== null && e.splitAmongIds.length > 0),
+    paidSettlements: (s.paidSettlements ?? []).filter(
+      (key) => !key.startsWith(`${id}:`) && !key.endsWith(`:${id}`)
+    ),
   }));
+}
+
+export function toggleSettlementPaid(fromId: string, toId: string): void {
+  const key = `${fromId}:${toId}`;
+  updateActiveState((s) => {
+    const paid = s.paidSettlements ?? [];
+    return {
+      ...s,
+      paidSettlements: paid.includes(key)
+        ? paid.filter((k) => k !== key)
+        : [...paid, key],
+    };
+  });
 }
 
 export function addExpense(expense: Omit<Expense, 'id'>): void {

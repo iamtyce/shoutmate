@@ -13,6 +13,7 @@ import {
   removeExpense,
   setCurrency,
   renameTrip,
+  toggleSettlementPaid,
 } from './store';
 import { calculateSettlements, calculateBalances, totalExpenses } from './calculator';
 import { parseRoute, navigate } from './router';
@@ -352,10 +353,21 @@ function renderTripList(): void {
                   day: 'numeric',
                   year: 'numeric',
                 });
+                const tripSettlements = expenseCount > 0
+                  ? calculateSettlements(t.state.participants, t.state.expenses)
+                  : [];
+                const tripPaid = new Set(t.state.paidSettlements ?? []);
+                const isSettled = expenseCount > 0 && (
+                  tripSettlements.length === 0 ||
+                  tripSettlements.every((s) => tripPaid.has(`${s.fromId}:${s.toId}`))
+                );
                 return `
                 <li class="trip-card" data-id="${t.id}" role="button" tabindex="0">
                   <div class="trip-card__body">
-                    <span class="trip-card__name">${escapeHtml(t.name)}</span>
+                    <div class="trip-card__name-row">
+                      <span class="trip-card__name">${escapeHtml(t.name)}</span>
+                      ${isSettled ? `<span class="trip-card__settled-badge">✓ Settled</span>` : ''}
+                    </div>
                     <span class="trip-card__meta">
                       ${peopleCount} ${peopleCount === 1 ? S.person : S.people}
                       · ${expenseCount} ${expenseCount === 1 ? S.expense : S.expenses}
@@ -548,7 +560,7 @@ function initTabs(): void {
 // ---------------------------------------------------------------------------
 
 function renderPeople(): void {
-  const { participants, expenses } = getState();
+  const { participants, expenses, paidSettlements } = getState();
   const list = el<HTMLElement>('#people-list');
 
   if (participants.length === 0) {
@@ -561,6 +573,14 @@ function renderPeople(): void {
   }
 
   const balances = calculateBalances(participants, expenses);
+  const settlements = calculateSettlements(participants, expenses);
+  const paid = new Set(paidSettlements ?? []);
+  const adjustedBalances = new Map(balances);
+  for (const s of settlements) {
+    if (!paid.has(`${s.fromId}:${s.toId}`)) continue;
+    adjustedBalances.set(s.fromId, (adjustedBalances.get(s.fromId) ?? 0) + s.amount);
+    adjustedBalances.set(s.toId, (adjustedBalances.get(s.toId) ?? 0) - s.amount);
+  }
 
   list.innerHTML = `
     <div class="card">
@@ -568,7 +588,7 @@ function renderPeople(): void {
       <ul class="people-list__items">
         ${participants
           .map((p) => {
-            const balance = balances.get(p.id) ?? 0;
+            const balance = adjustedBalances.get(p.id) ?? 0;
             const balanceClass =
               balance > 0.005 ? 'balance--positive'
               : balance < -0.005 ? 'balance--negative'
@@ -769,7 +789,7 @@ function initExpenseForm(): void {
 // ---------------------------------------------------------------------------
 
 function renderSettle(): void {
-  const { participants, expenses } = getState();
+  const { participants, expenses, paidSettlements } = getState();
   const container = el<HTMLElement>('#settle-summary');
 
   if (participants.length === 0) {
@@ -794,6 +814,16 @@ function renderSettle(): void {
   const balances = calculateBalances(participants, expenses);
   const total = totalExpenses(expenses);
   const nameMap = new Map(participants.map((p) => [p.id, p.name]));
+  const paid = new Set(paidSettlements ?? []);
+  const allPaid = settlements.length > 0 && settlements.every((s) => paid.has(`${s.fromId}:${s.toId}`));
+
+  // Adjust balances to reflect paid settlements (debtor balance moves toward 0, creditor balance moves toward 0)
+  const adjustedBalances = new Map(balances);
+  for (const s of settlements) {
+    if (!paid.has(`${s.fromId}:${s.toId}`)) continue;
+    adjustedBalances.set(s.fromId, (adjustedBalances.get(s.fromId) ?? 0) + s.amount);
+    adjustedBalances.set(s.toId, (adjustedBalances.get(s.toId) ?? 0) - s.amount);
+  }
 
   container.innerHTML = `
     <div class="card">
@@ -804,7 +834,7 @@ function renderSettle(): void {
       <ul class="balance-list">
         ${participants
           .map((p) => {
-            const balance = balances.get(p.id) ?? 0;
+            const balance = adjustedBalances.get(p.id) ?? 0;
             const balanceClass =
               balance > 0.005 ? 'balance--positive'
               : balance < -0.005 ? 'balance--negative'
@@ -829,29 +859,45 @@ function renderSettle(): void {
           <span class="settle-done__icon" aria-hidden="true">🎉</span>
           <p>${S.settledUp}</p>
         </div>`
-      : `<div class="card">
+      : `${allPaid
+          ? `<div class="card settle-done">
+              <span class="settle-done__icon" aria-hidden="true">🎉</span>
+              <p>${S.allPaidUp}</p>
+            </div>`
+          : ''}
+        <div class="card">
           <h2 class="card__title">${S.paymentsTitle}</h2>
           <ul class="settlement-list">
             ${settlements
-              .map(
-                (s) => `
-              <li class="settlement-item">
-                <div class="settlement-item__avatars">
-                  <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.fromId)}>${nameMap.get(s.fromId)?.charAt(0).toUpperCase() ?? '?'}</div>
-                  <span class="settlement-item__arrow" aria-hidden="true">→</span>
-                  <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.toId)}>${nameMap.get(s.toId)?.charAt(0).toUpperCase() ?? '?'}</div>
-                </div>
-                <div class="settlement-item__detail">
-                  <span><strong>${escapeHtml(s.fromName)}</strong> ${S.pays} <strong>${escapeHtml(s.toName)}</strong></span>
-                  <span class="settlement-item__amount">${formatCurrency(s.amount)}</span>
-                </div>
-              </li>`
-              )
+              .map((s) => {
+                const key = `${s.fromId}:${s.toId}`;
+                const isPaid = paid.has(key);
+                return `
+                <li class="settlement-item${isPaid ? ' settlement-item--paid' : ''}" data-from="${s.fromId}" data-to="${s.toId}">
+                  <div class="settlement-item__avatars">
+                    <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.fromId)}>${nameMap.get(s.fromId)?.charAt(0).toUpperCase() ?? '?'}</div>
+                    <span class="settlement-item__arrow" aria-hidden="true">→</span>
+                    <div class="person-item__avatar person-item__avatar--sm" ${avatarStyle(s.toId)}>${nameMap.get(s.toId)?.charAt(0).toUpperCase() ?? '?'}</div>
+                  </div>
+                  <div class="settlement-item__detail">
+                    <span><strong>${escapeHtml(s.fromName)}</strong> ${S.pays} <strong>${escapeHtml(s.toName)}</strong></span>
+                    <span class="settlement-item__amount">${formatCurrency(s.amount)}</span>
+                  </div>
+                  <button class="settlement-item__paid-btn${isPaid ? ' settlement-item__paid-btn--done' : ''}" data-from="${s.fromId}" data-to="${s.toId}" aria-pressed="${isPaid}">
+                    ${isPaid ? `✓ ${S.markAsUnpaid}` : S.markAsPaid}
+                  </button>
+                </li>`;
+              })
               .join('')}
           </ul>
         </div>`}`;
 
-  void nameMap;
+  container.querySelectorAll<HTMLButtonElement>('.settlement-item__paid-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      toggleSettlementPaid(btn.dataset.from!, btn.dataset.to!);
+      renderSettle();
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------

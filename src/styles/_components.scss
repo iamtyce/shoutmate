@@ -975,6 +975,45 @@
     font-weight: $font-weight-bold;
     color: var(--color-negative);
   }
+
+  &__paid-btn {
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+    border: 1px solid $color-border;
+    border-radius: $radius-full;
+    padding: $space-1 $space-3;
+    white-space: nowrap;
+    transition: background $transition-fast, color $transition-fast, border-color $transition-fast;
+
+    &:hover {
+      border-color: $color-primary;
+      color: $color-primary;
+    }
+
+    &--done {
+      background: $color-positive-bg;
+      border-color: $color-positive;
+      color: $color-positive;
+
+      &:hover {
+        background: $color-positive-bg;
+        border-color: $color-negative;
+        color: $color-negative;
+      }
+    }
+  }
+
+  &--paid {
+    opacity: 0.5;
+    border-left-color: $color-positive;
+
+    .settlement-item__amount {
+      color: $color-positive;
+      text-decoration: line-through;
+    }
+  }
 }
 
 #settle-summary {
@@ -1036,12 +1075,30 @@
     min-width: 0;
   }
 
+  &__name-row {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    min-width: 0;
+  }
+
   &__name {
     font-weight: $font-weight-semibold;
     font-size: $font-size-base;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  &__settled-badge {
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-positive;
+    background: $color-positive-bg;
+    padding: 1px $space-2;
+    border-radius: $radius-full;
+    white-space: nowrap;
   }
 
   &__meta {

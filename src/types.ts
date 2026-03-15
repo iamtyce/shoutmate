@@ -23,6 +23,7 @@ export interface AppState {
   participants: Participant[];
   expenses: Expense[];
   currency: string;
+  paidSettlements: string[];
 }
 
 export interface Trip {

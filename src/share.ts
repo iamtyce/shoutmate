@@ -64,7 +64,7 @@ function compactToTrip(raw: CompactTrip): Trip {
     id: crypto.randomUUID(),
     name: raw.n,
     createdAt: Date.now(),
-    state: { participants, expenses, currency: raw.c },
+    state: { participants, expenses, currency: raw.c, paidSettlements: [] },
   };
 }
 
